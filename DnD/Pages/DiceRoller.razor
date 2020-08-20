@@ -1,0 +1,116 @@
+﻿@page "/DiceRoller"
+@using System.ComponentModel.DataAnnotations
+
+<h1>Dice Roller</h1>
+
+<p>Totale: @totale (modificatore già sommato @mod)</p>
+@foreach (var roll in rolls)
+{
+    <p>Ho rollato un: @roll.TipoDado risultato: @roll.Valore</p>
+}
+<p>Quanti dadi vuoi rollare?</p>
+<EditForm Model="Data" OnValidSubmit="Roll">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputNumber @bind-Value="Data.NumeroD4" />
+    <span>d4</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD6" />
+    <span>d6</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD8" />
+    <span>d8</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD10" />
+    <span>d10</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD12" />
+    <span>d12</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD20" />
+    <span>d20</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.NumeroD100" />
+    <span>d100</span>
+    <br />
+    <br />
+
+    <input type="number" @bind="mod" /><span> Modificatore?</span>
+    <br />
+    <br />
+    <button class="btn btn-primary" type="submit">ROLL!</button>
+
+</EditForm>
+
+
+
+@code {
+
+    private FormData Data = new FormData();
+    private int totale = 0;
+    private string d4 = "d4";
+    private string d6 = "d6";
+    private string d8 = "d8";
+    private string d10 = "d10";
+    private string d12 = "d12";
+    private string d20 = "d20";
+    private string d100 = "d100";
+    private Random random = new Random();
+    private List<Risultato> rolls = new List<Risultato>();
+    private int mod = 0;
+
+    public class FormData
+    {
+        [Range(0,100)]
+        public int NumeroD4 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD6 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD8 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD10 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD12 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD20 { get; set; }
+        [Range(0, 100)]
+        public int NumeroD100 { get; set; }
+    }
+
+    private class Risultato
+    {
+        public string TipoDado { get; set; }
+        public int Valore { get; set; }
+    }
+
+    private void Roll()
+    {
+        rolls.Clear();
+        Enumerable.Repeat(0, Data.NumeroD4).ToList().ForEach(_ => rolls.Add(RollSingolo(d4)));
+        Enumerable.Repeat(0, Data.NumeroD6).ToList().ForEach(_ => rolls.Add(RollSingolo(d6)));
+        Enumerable.Repeat(0, Data.NumeroD8).ToList().ForEach(_ => rolls.Add(RollSingolo(d8)));
+        Enumerable.Repeat(0, Data.NumeroD10).ToList().ForEach(_ => rolls.Add(RollSingolo(d10)));
+        Enumerable.Repeat(0, Data.NumeroD12).ToList().ForEach(_ => rolls.Add(RollSingolo(d12)));
+        Enumerable.Repeat(0, Data.NumeroD20).ToList().ForEach(_ => rolls.Add(RollSingolo(d20)));
+        Enumerable.Repeat(0, Data.NumeroD100).ToList().ForEach(_ => rolls.Add(RollSingolo(d100)));
+        totale = rolls.Sum(r => r.Valore) + mod;
+
+    }
+    private Risultato RollSingolo(string tipoDado)
+    {
+        int max = int.Parse(tipoDado.Substring(1));
+        return new Risultato { TipoDado = tipoDado, Valore = random.Next(1, max + 1) };
+    }
+}

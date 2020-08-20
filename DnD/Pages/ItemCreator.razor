@@ -1,0 +1,118 @@
+﻿@page "/creator/item"
+
+@using LiteDB;
+@using DnD.Models
+@using System.ComponentModel.DataAnnotations
+
+<h1>Item creator</h1>
+
+<p>This component allows you to create new items and assign them to party members.</p>
+
+
+<EditForm Model="Data" OnValidSubmit="CreateItem">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value="Data.Type" />
+    <span>Weapon, Armor, Consumable, or other</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.Number" />
+    <span>Number of the items in possession</span>
+    <br />
+    <br />
+
+    <InputCheckbox @bind-Value="Data.Magic" />
+    <span>Is it magic?</span>
+    <br />
+    <br />
+
+    <InputText @bind-Value="Data.Name" />
+    <span>Name of the item</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.Value" />
+    <span>Value for buying new, or for magic purposes </span>
+    <br />
+    <br />
+
+    <InputTextArea @bind-Value="Data.Description" />
+    <span>Describe the item's effects, properties or aspect</span>
+    <br />
+    <br />
+
+    <InputSelect @bind-Value="Data.Owner" />
+    <span>Who's keeping the item</span>
+    <br />
+    <br />
+
+    <button class="btn btn-primary" type="submit">Create Item</button>
+
+</EditForm>
+
+
+@code {
+
+    public class FormData
+    {
+        //If the item is a weapon, piece of armour, a kit or stuff you've found
+        public string Type { get; set; }
+        //How many of this item you have in the inventory, specially useful for potions
+        public int Number { get; set; }
+        //Is the item in question magic or not
+        public bool Magic { get; set; }
+        //The name of the item
+        public string Name { get; set; }
+        //An indicative sum you would make from selling the item, or the countervalue for a component (IE the diamond dust for stoneskin)
+        public int Value { get; set; }
+        //Description of the item, it's function or properties, if necessary
+        public string Description { get; set; }
+        //Name of the character currently keeping or owning the item
+        public string Owner { get; set; }
+
+
+    }
+
+
+    private FormData Data = new FormData();
+
+    //Creates an Item, assigns it to a character and updates the character data in the database
+    public void CreateItem()
+    {
+        Item oggetto = new Item
+        {
+            Type = Data.Type,
+            Number = Data.Number,
+            Magic = Data.Magic,
+            Name = Data.Name,
+            Value = Data.Value,
+            Description = Data.Description,
+            Owner = Data.Owner
+        };
+
+
+        try
+        {
+            using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
+            {
+                ILiteCollection<Character> party = dbParty.GetCollection<Character>();
+                var owner = party.FindById($"{Data.Owner}");
+                owner.Inventory.Add(oggetto);
+                party.Update(owner);
+            }
+            js.Alert("Item created and added to the character's inventory");
+        }
+
+        catch
+
+        {
+            js.Alert("Error, character not found");
+
+        }
+
+
+
+    }
+}

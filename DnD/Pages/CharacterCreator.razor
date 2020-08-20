@@ -1,0 +1,120 @@
+﻿@page "/creator/character"
+
+@using LiteDB;
+@using DnD.Models
+@using System.ComponentModel.DataAnnotations
+
+
+<h1>Character creator</h1>
+
+<p>This component allows you to create new characters for the party.</p>
+
+
+<EditForm Model="Data" OnValidSubmit="CreateCharacter">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value="Data.PlayerName" />
+    <span>Name of the player </span>
+    <br />
+    <br />
+
+    <InputText @bind-Value="Data.CharacterName" />
+    <span>Name of the Character</span>
+    <br />
+    <br />
+
+    <InputText @bind-Value="Data.Class" />
+    <span>Class</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.Level" />
+    <span>Level</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.Gold" />
+    <span>Gold</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.InitiativeBonus" />
+    <span>Initiative bonus</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.PassivePerception" />
+    <span>Passive perception </span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.PassiveInsight" />
+    <span>Passive insight</span>
+    <br />
+    <br />
+
+    <InputNumber @bind-Value="Data.Hp" />
+    <span>Hp</span>
+    <br />
+    <br />
+
+    <button class="btn btn-primary" type="submit">Create Character</button>
+
+</EditForm>
+
+
+@code {
+
+    public class FormData
+    {
+        //Name of the Character
+        public string CharacterName { get; set; }
+        //Class of the character
+        public string Class { get; set; }
+        //Level of the character
+        public int Level { get; set; }
+        //Name player controlling the character
+        public string PlayerName { get; set; }
+        //The  old the character has with him/her
+        public int Gold { get; set; }
+        //Init ative bonus of the character, in case they trust you to roll their initiative
+        public int InitiativeBonus { get; set; }
+        //Pass ve perception of the character
+        public int PassivePerception { get; set; }
+        //Pass ve insight of the character
+        public int PassiveInsight { get; set; }
+        //Heal h points of the character, helpful if you want to cast sleep or other spells
+        public int Hp { get; set; }
+    }
+
+    private FormData Data = new FormData();
+
+    //Creates a Character with stats and no inventory, then saves it to the database
+    public void CreateCharacter()
+    {
+        Character personaggio = new Character
+        {
+            CharacterName = Data.CharacterName,
+            Class = Data.Class,
+            Level = Data.Level,
+            PlayerName = Data.PlayerName,
+            Gold = Data.Gold,
+            InitiativeBonus = Data.InitiativeBonus,
+            PassivePerception = Data.PassivePerception,
+            PassiveInsight = Data.PassiveInsight,
+            Hp = Data.Hp,
+            Inventory = new List<Item>()
+        };
+
+        using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
+        {
+            ILiteCollection<Character> party = dbParty.GetCollection<Character>();
+            party.Insert(personaggio);
+
+        }
+        js.Alert("character created and added to database");
+
+
+    }
+}

@@ -8,7 +8,6 @@
 
 <p>This component allows you to create new items and assign them to party members.</p>
 
-
 <EditForm Model="Data" OnValidSubmit="CreateItem">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -54,9 +53,7 @@
     <br />
 
     <button class="btn btn-primary" type="submit">Create Item</button>
-
 </EditForm>
-
 
 @code {
 
@@ -76,7 +73,6 @@
         public string Description { get; set; }
         //Name of the character currently keeping or owning the item
         public string Owner { get; set; }
-
 
     }
 
@@ -107,7 +103,6 @@
             Owner = Data.Owner
         };
 
-
         try
         {
             using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
@@ -126,8 +121,6 @@
             js.Alert("Error, character not found");
 
         }
-
-
 
     }
 }

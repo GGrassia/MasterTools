@@ -1,48 +1,50 @@
 ﻿@page "/creator/item"
 
 @using LiteDB;
-@using DnD.Models
-@using System.ComponentModel.DataAnnotations
+@using DnD.Models;
+@using DnD.Entities;
+@using System.ComponentModel.DataAnnotations;
+@inject ICharacterRepository Repo
 
 <h1>Item creator</h1>
 
 <p>This component allows you to create new items and assign them to party members.</p>
 
-<EditForm Model="Data" OnValidSubmit="CreateItem">
+<EditForm Model="data" OnValidSubmit="CreateItem">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputText @bind-Value="Data.Type" />
+    <InputText @bind-Value="data.Type" />
     <span>Weapon, Armor, Consumable, or other</span>
     <br />
     <br />
 
-    <InputNumber @bind-Value="Data.Number" />
+    <InputNumber @bind-Value="data.Number" />
     <span>Number of the items in possession</span>
     <br />
     <br />
 
-    <InputCheckbox @bind-Value="Data.Magic" />
+    <InputCheckbox @bind-Value="data.IsMagic" />
     <span>Is it magic?</span>
     <br />
     <br />
 
-    <InputText @bind-Value="Data.Name" />
+    <InputText @bind-Value="data.Name" />
     <span>Name of the item</span>
     <br />
     <br />
 
-    <InputNumber @bind-Value="Data.Value" />
+    <InputNumber @bind-Value="data.Value" />
     <span>Value for buying new, or for magic purposes </span>
     <br />
     <br />
 
-    <InputTextArea @bind-Value="Data.Description" />
+    <InputTextArea @bind-Value="data.Description" />
     <span>Describe the item's effects, properties or aspect</span>
     <br />
     <br />
 
-    <InputSelect @bind-Value="Data.Owner">
+    <InputSelect @bind-Value="data.Owner">
         @foreach (var character in characters)
         {
             <option value="@character.CharacterName">@character.CharacterName</option>
@@ -59,67 +61,59 @@
 
     public class FormData
     {
-        //If the item is a weapon, piece of armour, a kit or stuff you've found
+        /// <summary>If the item is a weapon, piece of armour, a kit or stuff you've found</summary>
         public string Type { get; set; }
-        //How many of this item you have in the inventory, specially useful for potions
-        public int Number { get; set; }
-        //Is the item in question magic or not
-        public bool Magic { get; set; }
-        //The name of the item
-        public string Name { get; set; }
-        //An indicative sum you would make from selling the item, or the countervalue for a component (IE the diamond dust for stoneskin)
-        public int Value { get; set; }
-        //Description of the item, it's function or properties, if necessary
-        public string Description { get; set; }
-        //Name of the character currently keeping or owning the item
-        public string Owner { get; set; }
 
+        /// <summary>How many of this item you have in the inventory, specially useful for potions</summary>
+        public int Number { get; set; }
+
+        /// <summary>Is the item in question magic or not</summary>
+        public bool IsMagic { get; set; }
+
+        /// <summary>The name of the item</summary>
+        public string Name { get; set; }
+
+        /// <summary>An indicative sum you would make from selling the item, or the countervalue for a component (IE the diamond dust for stoneskin)</summary>
+        public int Value { get; set; }
+
+        /// <summary>Description of the item, it's function or properties, if necessary</summary>
+        public string Description { get; set; }
+
+        /// <summary>Name of the character currently keeping or owning the item</summary>
+        public string Owner { get; set; } = string.Empty;
     }
 
     protected override void OnInitialized()
     {
-        using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
-        {
-            ILiteCollection<Character> party = dbParty.GetCollection<Character>();
-            characters = party.FindAll().ToList();
-        }
+        characters = Repo.GetAll().ToList();
     }
 
-    private List<Character> characters = new List<Character>();
+    private List<CharacterEntity> characters = new List<CharacterEntity>();
 
-    private FormData Data = new FormData();
+    private FormData data = new FormData();
 
     //Creates an Item, assigns it to a character and updates the character data in the database
     public void CreateItem()
     {
         Item oggetto = new Item
         {
-            Type = Data.Type,
-            Number = Data.Number,
-            Magic = Data.Magic,
-            Name = Data.Name,
-            Value = Data.Value,
-            Description = Data.Description,
-            Owner = Data.Owner
+            Type = data.Type,
+            Number = data.Number,
+            IsMagic = data.IsMagic,
+            Name = data.Name,
+            Value = data.Value,
+            Description = data.Description,
+            Owner = data.Owner
         };
 
         try
         {
-            using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
-            {
-                ILiteCollection<Character> party = dbParty.GetCollection<Character>();
-                var owner = characters.First(c => c.CharacterName == Data.Owner);
-                owner.Inventory.Add(oggetto);
-                party.Update(owner);
-            }
+            Repo.AddItem(oggetto.Owner, oggetto);
             js.Alert("Item created and added to the character's inventory");
         }
-
-        catch
-
+        catch (KeyNotFoundException)
         {
             js.Alert("Error, character not found");
-
         }
 
     }

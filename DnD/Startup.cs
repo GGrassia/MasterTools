@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DnD.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,11 @@ namespace DnD
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddServerSideBlazor();        }
+            services.AddServerSideBlazor();
+
+            // Qui stiamo registrando la repository LiteDB come servizio da fornire ai componenti tramite dependency injection.
+            services.AddScoped(typeof(ICharacterRepository), (o) => new LiteDbCharacterRepository("Party.db"));
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

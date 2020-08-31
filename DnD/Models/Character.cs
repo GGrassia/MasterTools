@@ -11,6 +11,7 @@ namespace DnD.Models
     {
         //Name of the Character
         [BsonId]
+        public Guid Id { get; set; }
         public string CharacterName {get; set;}
         //Class of the character
         public string Class { get; set; }

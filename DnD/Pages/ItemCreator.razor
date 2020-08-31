@@ -43,7 +43,12 @@
     <br />
     <br />
 
-    <InputSelect @bind-Value="Data.Owner" />
+    <InputSelect @bind-Value="Data.Owner">
+        @foreach (var character in characters)
+        {
+            <option value="@character.CharacterName">@character.CharacterName</option>
+        }
+    </InputSelect>
     <span>Who's keeping the item</span>
     <br />
     <br />
@@ -75,6 +80,16 @@
 
     }
 
+    protected override void OnInitialized()
+    {
+        using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
+        {
+            ILiteCollection<Character> party = dbParty.GetCollection<Character>();
+            characters = party.FindAll().ToList();
+        }
+    }
+
+    private List<Character> characters = new List<Character>();
 
     private FormData Data = new FormData();
 
@@ -98,7 +113,7 @@
             using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
             {
                 ILiteCollection<Character> party = dbParty.GetCollection<Character>();
-                var owner = party.FindById($"{Data.Owner}");
+                var owner = characters.First(c => c.CharacterName == Data.Owner);
                 owner.Inventory.Add(oggetto);
                 party.Update(owner);
             }

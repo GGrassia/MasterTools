@@ -1,0 +1,58 @@
+﻿@page "/PartyInventory"
+
+@using LiteDB
+@using DnD.Models
+@using System.ComponentModel.DataAnnotations
+
+<h1>These are the items in the active players' inventory</h1>
+<br />
+<br />
+<button @onclick="ShowInventory">Show/Update</button>
+<br />
+<br />
+
+<table style="width:100%">
+    <tr>
+        <th>Type</th>
+        <th>Number</th>
+        <th>Magic</th>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Owner</th>
+    </tr>
+    @foreach (var item in inventory)
+    {
+        <tr>
+            <th>@item.Type</th>
+            <th>@item.Number</th>
+            <th>@item.Magic</th>
+            <th>@item.Name</th>
+            <th>@item.Value</th>
+            <th>@item.Owner</th>
+        </tr>
+    }
+</table>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
+        {
+            ILiteCollection<Character> party = dbParty.GetCollection<Character>();
+            characters = party.FindAll().ToList();
+        }
+    }
+
+    private List<Character> characters = new List<Character>();
+    private List<Item> inventory = new List<Item>();
+
+    public void ShowInventory()
+    {
+        foreach (var character in characters)
+        {
+            inventory = characters.SelectMany(x => x.Inventory).ToList();
+        }
+    }
+
+}

@@ -7,9 +7,6 @@
 <h1>These are the items in the active players' inventory</h1>
 <br />
 <br />
-<button @onclick="ShowInventory">Show/Update</button>
-<br />
-<br />
 
 <table style="width:100%">
     <tr>
@@ -43,19 +40,17 @@
         {
             ILiteCollection<Character> party = dbParty.GetCollection<Character>();
             characters = party.FindAll().ToList();
+            foreach (var character in characters)
+            {
+                inventory = characters.SelectMany(x => x.Inventory).ToList();
+            }
+
         }
     }
 
     private List<Character> characters = new List<Character>();
     private List<Item> inventory = new List<Item>();
 
-    public void ShowInventory()
-    {
-        foreach (var character in characters)
-        {
-            inventory = characters.SelectMany(x => x.Inventory).ToList();
-        }
-    }
     private void ItemRemove(Item item)
     {
         inventory.Remove(item);

@@ -29,9 +29,11 @@
             <th>@item.Name</th>
             <th>@item.Value</th>
             <th>@item.Owner</th>
+            <th><button @onclick="@(() => ItemRemove(item))"></button></th>
         </tr>
     }
 </table>
+
 
 @code {
 
@@ -54,5 +56,17 @@
             inventory = characters.SelectMany(x => x.Inventory).ToList();
         }
     }
+    private void ItemRemove(Item item)
+    {
+        inventory.Remove(item);
+        using (LiteDatabase dbParty = new LiteDatabase("Party.db"))
+        {
+            ILiteCollection<Character> party = dbParty.GetCollection<Character>();
+            var owner = characters.First(c => c.CharacterName == item.Owner);
+            owner.Inventory.Remove(item);
+            party.Update(owner);
+            characters = party.FindAll().ToList();
+        }
 
+    }
 }

@@ -1,12 +1,43 @@
 ﻿@page "/"
 
+@using LiteDB;
+@using DnD.Models;
+@using DnD.Entities;
+@using System.ComponentModel.DataAnnotations;
+@inject ICharacterRepository Repo
+
 <h1>Welcome to the MasterTool!</h1>
 
 This is a tool to help you keep track of passive stats and inventory of your players.
 <br />
 <h2>Select the characters who are playing this session</h2>
 
+@foreach (var character in characters)
+{
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem; float:left;">
+  <div class="card-body">
+    <h5 class="character name">Name: @character.CharacterName</h5>
+    <h6 class="character class">Class: @character.Class</h6>
+    <h5 class="character level">Level: @character.Level</h5>
+    <h5 class="character HP">HP: @character.Hp</h5>
+    <h5 class="character passive perception">Passive perception: @character.PassivePerception</h5>
+    <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div> 
+}
+
+
 @code {
 
+    private List<CharacterEntity> characters = new List<CharacterEntity>();
 
+protected override void OnInitialized()
+    {
+        characters = Repo.GetAll().ToList();
+    }
+
+private void CharacterRemove(CharacterEntity character){
+    Repo.Delete(character);
+}
 }

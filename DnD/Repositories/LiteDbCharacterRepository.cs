@@ -1,4 +1,5 @@
-﻿using DnD.Entities;
+﻿using System.Reflection.PortableExecutable;
+using DnD.Entities;
 using DnD.Models;
 using LiteDB;
 using System;
@@ -62,6 +63,13 @@ namespace DnD.Repositories
             var character = GetByName(owner) ?? throw new KeyNotFoundException();
             var itemToRemove = character.Inventory.First(i => i.Name == itemName);
             character.Inventory.Remove(itemToRemove);
+            Update(character);
+        }
+
+        public void TogglePlaying(string characterName)
+        {
+            var character = GetByName(characterName) ?? throw new KeyNotFoundException();
+            character.Playing = !character.Playing;
             Update(character);
         }
 

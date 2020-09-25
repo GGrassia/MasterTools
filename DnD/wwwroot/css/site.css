@@ -2,7 +2,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #E4E9F1;
+    background-color: #DCE1DE;
 }
 
 a, .btn-link {
@@ -32,7 +32,7 @@ app {
 }
 
     .main .top-row {
-        background-image: linear-gradient(90deg, #B6C2D9 0%, #4D7EA8 70%);
+        background-image: linear-gradient(90deg, #49A078 0%, #1F2421 70%);
         justify-content: flex-end;
     }
 
@@ -47,7 +47,7 @@ app {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, #B6C2D9 0%, #4D7EA8 70%);
+    background-image: linear-gradient(180deg, #49A078 0%, #2a3a31 100%);
 }
 
     .sidebar .top-row {
@@ -88,7 +88,7 @@ app {
         }
 
             .sidebar .nav-item a.active {
-                background-color: rgba(255,255,255,0.25);
+                background-color: #9CC5A1(255,255,255,0.25);
                 color: rgb(27, 44, 80);
             }
 

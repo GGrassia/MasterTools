@@ -111,7 +111,8 @@
             PassivePerception = data.PassivePerception,
             PassiveInsight = data.PassiveInsight,
             Hp = data.Hp,
-            Inventory = new List<Item>()
+            Inventory = new List<Item>(),
+            Playing = false
         };
 
         Repo.Create(personaggio);

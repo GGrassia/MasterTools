@@ -20,5 +20,6 @@ namespace DnD.Repositories
         CharacterEntity GetByName(string characterName);
         void RemoveItem(string owner, string itemName);
         void Update(CharacterEntity entity);
+        void TogglePlaying(string characterName);
     }
 }

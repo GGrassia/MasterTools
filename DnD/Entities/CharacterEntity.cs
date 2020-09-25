@@ -35,5 +35,8 @@ namespace DnD.Entities
 
         /// <summary>Health points of the character, helpful if you want to cast sleep or other spells</summary>
         public int Hp { get; set; }
+
+        /// <summary>Toggle if the character is playing or not</summary>
+        public bool Playing {get; set;}
     }
 }

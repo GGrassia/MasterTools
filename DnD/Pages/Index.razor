@@ -14,37 +14,40 @@ This is a tool to help you keep track of passive stats and inventory of your pla
 
 @foreach (var character in characters)
 {
-<div class="card text-white bg-dark mb-3" style="max-width: 18rem; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
-  <div class="card-body">
-    <h5 class="character name">Name: @character.CharacterName</h5>
-    <h6 class="character class">Class: @character.Class</h6>
-    <h5 class="character level">Level: @character.Level</h5>
-    <h5 class="character HP">HP: @character.Hp</h5>
-    <h5 class="character passive perception">Passive perception: @character.PassivePerception</h5>
-    <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
-    <button type="button" data-toggle="button" class="btn btn-success"@onclick="@(() => Repo.TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
-  </div>
-</div> 
-<div>
-  @foreach (var c in characters)
-  {
-      <p>@c.Playing</p>
-  }
-</div>
+    <div class="card text-white bg-dark mb-3" style="max-width: 18rem; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
+      <div class="card-body">
+        <h5 class="character name">Name: @character.CharacterName</h5>
+        <h6 class="character class">Class: @character.Class</h6>
+        <h5 class="character level">Level: @character.Level</h5>
+        <h5 class="character HP">HP: @character.Hp</h5>
+        <h5 class="character passive perception">Passive perception: @character.PassivePerception</h5>
+        <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+        <button type="button" data-toggle="button" class="btn btn-success"@onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+      </div>
+    </div> 
 }
-
 
 @code {
 
     private List<CharacterEntity> characters = new List<CharacterEntity>();
 
-protected override void OnInitialized()
+    protected override void OnInitialized()
     {
         characters = Repo.GetAll().ToList();
     }
 
-private void CharacterRemove(CharacterEntity character){
-    Repo.Delete(character);
-    characters.Remove(character);
-}
+    private async Task CharacterRemove(CharacterEntity character){
+        if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
+        {
+            Repo.Delete(character);
+            characters.Remove(character);
+        }
+
+    }
+    private void TogglePlaying(string characterName)
+    {
+        Repo.TogglePlaying(characterName);
+        var ch = characters.First(c => c.CharacterName == characterName);
+        ch.Playing = !ch.Playing;
+    }
 }

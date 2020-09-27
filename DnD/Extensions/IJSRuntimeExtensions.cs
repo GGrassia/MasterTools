@@ -13,5 +13,9 @@ namespace DnD.Extensions
         {
             js.InvokeVoidAsync("alert", new object[] { message });
         }
+        public static ValueTask<bool> Confirm(this IJSRuntime js, string message)
+        {
+            return js.InvokeAsync<bool>("confirm", new object[] { message });
+        }
     }
 }

@@ -6,7 +6,7 @@
 @using DnD.Entities 
 @inject ICharacterRepository Repo
 
-<h1>These are the items in the active players' inventory</h1>
+<h1>These are the items in the playing characters' inventory</h1>
 <br />
 <br />
 
@@ -44,9 +44,18 @@ style="width:100%; background-color: #1F2421">
 
     protected override void OnInitialized()
     {
-        inventory = Repo.GetAllItems().ToList();
+        //inventory = Repo.GetAllItems().ToList();
+        active = Repo.GetAll().ToList();
+        foreach (var p in active)
+        {
+            if (p.Playing == true)
+            {
+                p.Inventory.AddRange(inventory);
+            }
+        }
     }
 
+    private List<CharacterEntity> active = new List<CharacterEntity>();
     private List<Item> inventory = new List<Item>();
 
     private void ItemRemove(Item item)

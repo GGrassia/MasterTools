@@ -22,14 +22,14 @@ namespace DnD
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?Link`ID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
             // Qui stiamo registrando la repository LiteDB come servizio da fornire ai componenti tramite dependency injection.
-            services.AddScoped(typeof(ICharacterRepository), (o) => new LiteDbCharacterRepository("Party.db"));
+            services.AddSingleton(typeof(ICharacterRepository), (o) => new LiteDbCharacterRepository("Party.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

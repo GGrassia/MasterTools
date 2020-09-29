@@ -75,5 +75,7 @@ namespace DnD.Repositories
 
         public IEnumerable<Item> GetAllItems()
             => GetAll().SelectMany(c => c.Inventory);
+        public IEnumerable<CharacterEntity> GetActiveCharacters()
+            => GetAll().Where(c => c.Playing);
     }
 }

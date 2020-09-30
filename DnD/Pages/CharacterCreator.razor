@@ -13,17 +13,17 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputText @bind-Value="data.PlayerName" />
-    <span>Name of the player </span>
-    <br />
-    <br />
-
     <InputText @bind-Value="data.CharacterName" />
     <span>Name of the Character</span>
     <br />
     <br />
 
-    <InputText @bind-Value="data.Class" />
+    <InputSelect @bind-Value="data.Class">
+        @foreach (var c in Enum.GetNames(typeof(Classes)))
+        {
+            <option value="@c">@c</option>
+        }
+    </InputSelect>
     <span>Class</span>
     <br />
     <br />
@@ -57,8 +57,14 @@
     <span>Hp</span>
     <br />
     <br />
+    
+    <InputText @bind-Value="data.PlayerName" />
+    <span>Name of the player </span>
+    <br />
+    <br />
 
-    <button class="btn btn-primary" type="submit">Create Character</button>
+
+    <button class="btn btn-primary" style="background-color: #49a078; border: 0px; border-color: dce1de" type="submit">Create Character</button>
 
 </EditForm>
 
@@ -96,6 +102,11 @@
     }
 
     private FormData data = new FormData();
+
+    private enum Classes
+    {
+        Artificer, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
+    }
 
     //Creates a Character with stats and no inventory, then saves it to the repository
     public void CreateCharacter()

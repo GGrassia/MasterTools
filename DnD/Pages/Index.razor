@@ -16,11 +16,22 @@ This is a tool to help you keep track of passive stats and inventory of your pla
 {
     <div class="card text-white bg-dark mb-3" style="width: 290px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
       <div class="card-body">
-        <h5 class="character name">Name: @character.CharacterName</h5>
-        <h6 class="character class">Class: @character.Class</h6>
-        <h5 class="character level">Level: @character.Level</h5>
-        <h5 class="character HP">HP: @character.Hp</h5>
-        <h5 class="character passive perception">Passive perception: @character.PassivePerception</h5>
+        <h4 class="character name">Name: @character.CharacterName</h4>
+        <h5 class="character class">Class: @character.Class</h5>
+        <h6 class="character level">Level: @character.Level</h6>
+        <div>
+            HP:<input type="number" min="1" max="999"
+            class ="input" role="textbox" contenteditable="true"
+            style="background-color: #AE0C37;
+            color: #fff;
+            font-size: 16px;
+            border: 0px;
+            border-radius: 25px;
+            width: expressopn;
+            padding: 0px 10px"
+            @bind="character.Hp">
+        </div>
+        <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
         <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
         <button type="button" data-toggle="button" class="btn btn-success"@onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
       </div>

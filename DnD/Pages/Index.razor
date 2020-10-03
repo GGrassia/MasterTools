@@ -8,34 +8,34 @@
 
 <h1>Welcome to the MasterTool!</h1>
 
-This is a tool to help you keep track of passive stats and inventory of your players.
+<h3>This is a tool to help you keep track of passive stats and inventory of your players.</h3>
 <br />
+<h4>Roll a passive check</h4><input @bind="cr" />CR?
+<button type="button" class="btn btn-danger" @onclick="@(() => RollPassivePerception(cr))">Passive Perception</button>
+<div>
+    <p>Passed: </p>
+    @foreach (var passing in passed)
+{
+    <p style="font-weight: bold;">@passing.CharacterName </p>
+    
+}
+</div>
+
 <h2>Select the characters who are playing this session</h2>
 
 @foreach (var character in characters)
 {
     <div class="card text-white bg-dark mb-3" style="width: 290px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
-      <div class="card-body">
-        <h4 class="character name">Name: @character.CharacterName</h4>
-        <h5 class="character class">Class: @character.Class</h5>
-        <h6 class="character level">Level: @character.Level</h6>
-        <div>
-            HP:<input type="number" min="1" max="999"
-            class ="input" role="textbox" contenteditable="true"
-            style="background-color: #AE0C37;
-            color: #fff;
-            font-size: 16px;
-            border: 0px;
-            border-radius: 25px;
-            width: expressopn;
-            padding: 0px 10px"
-            @bind="character.Hp">
+        <div class="card-body">
+            <h4 class="character name">Name: @character.CharacterName</h4>
+            <h5 class="character class">Class: @character.Class</h5>
+            <h6 class="character level">Level: @character.Level</h6>
+            <div>HP:<input type="number" min="1" max="999" @bind="character.Hp"></div>
+            <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
+            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+            <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
         </div>
-        <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
-        <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
-        <button type="button" data-toggle="button" class="btn btn-success"@onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
-      </div>
-    </div> 
+    </div>
 }
 
 @code {
@@ -47,7 +47,11 @@ This is a tool to help you keep track of passive stats and inventory of your pla
         characters = Repo.GetAll().ToList();
     }
 
-    private async Task CharacterRemove(CharacterEntity character){
+    private int cr = 1;
+    private List<CharacterEntity> passed = new List<CharacterEntity>();
+
+    private async Task CharacterRemove(CharacterEntity character)
+    {
         if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
         {
             Repo.Delete(character);
@@ -61,4 +65,10 @@ This is a tool to help you keep track of passive stats and inventory of your pla
         var ch = characters.First(c => c.CharacterName == characterName);
         ch.Playing = !ch.Playing;
     }
+
+    private void RollPassivePerception(int cr)
+    {
+        passed = Repo.GetActiveCharacters().Where(p => p.PassivePerception >= cr).ToList();
+    }
+
 }

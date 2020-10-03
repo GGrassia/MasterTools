@@ -15,8 +15,8 @@ class="table table-striped table-dark"
 style="width:100%; background-color: #1F2421">
     <thead>
         <tr>
-            <th scope="col">Number</th>
             <th scope="col">Name</th>
+            <th scope="col">Number</th>
             <th scope="col">Type</th>
             <th scope="col">Magic</th>
             <th scope="col">Value</th>
@@ -27,12 +27,18 @@ style="width:100%; background-color: #1F2421">
         @foreach (var item in inventory)
         {
             <tr>
-                <th scope="row">@item.Number</th>
-                <td>@item.Name</td>
+                <th scope="row">@item.Name</th>
+                <td>@item.Number</td>
                 <td>@item.Type</td>
                 <td>@item.IsMagic</td>
                 <td>@item.Value</td>
-                <td>@item.Owner</td>
+                <td>
+                    <select @bind="item.Owner">
+                        @foreach (var character in characters)
+                        {
+                            <option value="@character.CharacterName">@character.CharacterName</option>
+                        }
+                </select>@item.Owner</td>
                 <td><button type="button" class="btn btn-danger" @onclick="@(() => ItemRemove(item))">Remove</button></td>
             </tr>
         }
@@ -45,8 +51,10 @@ style="width:100%; background-color: #1F2421">
     protected override void OnInitialized()
     {
         inventory = Repo.GetActiveCharacters().SelectMany(c =>c.Inventory).ToList();
+        characters = Repo.GetAll().ToList();
+
     }
-      private List<CharacterEntity> active = new List<CharacterEntity>();
+    private List<CharacterEntity> characters = new List<CharacterEntity>();
     private List<Item> inventory = new List<Item>();
 
     private void ItemRemove(Item item)

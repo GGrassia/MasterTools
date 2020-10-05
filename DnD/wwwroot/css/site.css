@@ -1,4 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('Images\fantasy-2243769.jpg');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -30,9 +31,9 @@ app {
 .main {
     flex: 1;
 }
-
+/*linear-gradient(90deg, #49A078 0%, #1F2421 70%);*/
     .main .top-row {
-        background-image: linear-gradient(90deg, #49A078 0%, #1F2421 70%);
+        background-image: url("Images\fantasy-2243769.jpg");
         justify-content: flex-end;
     }
 

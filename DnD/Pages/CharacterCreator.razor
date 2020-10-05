@@ -19,7 +19,7 @@
     <br />
 
     <InputSelect @bind-Value="data.Class">
-        @foreach (var c in Enum.GetNames(typeof(Classes)))
+        @foreach (var c in Enum.GetNames(typeof(classes)))
         {
             <option value="@c">@c</option>
         }
@@ -103,7 +103,7 @@
 
     private FormData data = new FormData();
 
-    private enum Classes
+    private enum classes
     {
         Artificer, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
     }

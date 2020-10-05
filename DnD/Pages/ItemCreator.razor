@@ -14,7 +14,12 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputText @bind-Value="data.Type" />
+    <InputSelect @bind-Value="data.Type">
+    @foreach (var c in Enum.GetNames(typeof(itemTypes)))
+        {
+            <option value="@c">@c</option>
+        }
+    </InputSelect>
     <span>Weapon, Armor, Consumable, or other</span>
     <br />
     <br />
@@ -88,6 +93,10 @@
         characters = Repo.GetAll().ToList();
     }
 
+    private enum itemTypes
+    {
+        Weapon, Armor, Tool, Toolkit, Potion, Other
+    }
     private List<CharacterEntity> characters = new List<CharacterEntity>();
 
     private FormData data = new FormData();

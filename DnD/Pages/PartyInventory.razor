@@ -32,13 +32,7 @@ style="width:100%; background-color: #1F2421">
                 <td>@item.Type</td>
                 <td>@item.IsMagic</td>
                 <td>@item.Value</td>
-                <td>
-                    <select @bind="item.Owner">
-                        @foreach (var character in characters)
-                        {
-                            <option value="@character.CharacterName">@character.CharacterName</option>
-                        }
-                </select>@item.Owner</td>
+                <td>@item.Owner</td>
                 <td><button type="button" class="btn btn-danger" @onclick="@(() => ItemRemove(item))">Remove</button></td>
             </tr>
         }

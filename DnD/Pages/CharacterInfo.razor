@@ -9,26 +9,34 @@
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
 <select>
-        @foreach (var dude in characters)
+        @foreach (var character in characters)
         {
-            <option value="@dude.CharacterName">@dude.CharacterName</option>
+            <option value="@character">@character.CharacterName</option>
         }
 </select>
+<div class="card text-white bg-dark mb-3" style="width: 290px; height: 275px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
+        <div class="card-body">
+            <h4 class="character name">Name: @character.CharacterName</h4>
+            <h5 class="character class">Class: @character.Class</h5>
+            <h6 class="character level">Level: @character.Level</h6>
+            <div>HP:<input type="number" min="1" max="999" @bind="character.Hp"></div>
+            <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
+            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+            <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+        </div>
+    </div>
 
 
 @code {
 
-           private var character = characters.First();
     private List<CharacterEntity> characters = new List<CharacterEntity>();
+    private CharacterEntity character;
 
     protected override void OnInitialized()
     {
         characters = Repo.GetAll().ToList();
- 
+        character = characters.First();
     }
-
-    private int cr = 1;
-    private List<CharacterEntity> passed = new List<CharacterEntity>();
 
     private async Task CharacterRemove(CharacterEntity character)
     {
@@ -44,11 +52,6 @@
         Repo.TogglePlaying(characterName);
         var ch = characters.First(c => c.CharacterName == characterName);
         ch.Playing = !ch.Playing;
-    }
-
-    private void RollPassivePerception(int cr)
-    {
-        passed = Repo.GetActiveCharacters().Where(p => p.PassivePerception >= cr).ToList();
     }
 
 }

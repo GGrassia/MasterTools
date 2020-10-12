@@ -8,12 +8,16 @@
 
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
-<select>
-        @foreach (var character in characters)
+<EditForm Model="this">
+<InputSelect TValue="CharacterEntity" @bind-Value="@character">
+       @foreach (CharacterEntity character in characters)
         {
-            <option value="@character">@character.CharacterName</option>
+            <option Value="@character">@character.CharacterName</option>
         }
-</select>
+
+</InputSelect>
+</EditForm>
+<br>
 <div class="card text-white bg-dark mb-3" style="width: 290px; height: 275px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
         <div class="card-body">
             <h4 class="character name">Name: @character.CharacterName</h4>

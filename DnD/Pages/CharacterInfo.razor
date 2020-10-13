@@ -9,10 +9,10 @@
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
 <EditForm Model="this">
-<InputSelect TValue="CharacterEntity" @bind-Value="@character">
+<InputSelect @bind-Value="@selected">
        @foreach (CharacterEntity character in characters)
         {
-            <option Value="@character">@character.CharacterName</option>
+            <option Value="@character.CharacterName">@character.CharacterName</option>
         }
 
 </InputSelect>
@@ -35,6 +35,18 @@
 
     private List<CharacterEntity> characters = new List<CharacterEntity>();
     private CharacterEntity character;
+    public string selected
+    {
+        
+        get
+        {
+            return selected;
+        }
+        set
+        {
+            character = characters.First();
+        }
+    }
 
     protected override void OnInitialized()
     {

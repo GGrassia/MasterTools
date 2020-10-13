@@ -10,9 +10,9 @@
 <h2>Select the character you want info about</h2>
 <EditForm Model="this">
 <InputSelect @bind-Value="@selected">
-       @foreach (CharacterEntity character in characters)
+       @foreach (CharacterEntity s in characters)
         {
-            <option Value="@character.CharacterName">@character.CharacterName</option>
+            <option value="@s.CharacterName">@s.CharacterName</option>
         }
 
 </InputSelect>
@@ -37,14 +37,13 @@
     private CharacterEntity character;
     public string selected
     {
-        
         get
         {
             return selected;
         }
         set
         {
-            character = characters.First();
+            character = characters.Find(c => c.CharacterName == character.CharacterName);
         }
     }
 

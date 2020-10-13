@@ -9,7 +9,7 @@
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
 <EditForm Model="this">
-<InputSelect @bind-Value="@selected">
+<InputSelect TValue="string" @bind-Value="@selected">
        @foreach (CharacterEntity s in characters)
         {
             <option value="@s.CharacterName">@s.CharacterName</option>
@@ -35,15 +35,15 @@
 
     private List<CharacterEntity> characters = new List<CharacterEntity>();
     private CharacterEntity character;
-    public string selected
+    private string selected
     {
         get
         {
-            return selected;
+            return character.CharacterName;
         }
         set
         {
-            character = characters.Find(c => c.CharacterName == character.CharacterName);
+            character = characters.Find(c => c.CharacterName == value);
         }
     }
 

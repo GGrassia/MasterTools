@@ -18,18 +18,51 @@
 </InputSelect>
 </EditForm>
 <br>
-<div class="card text-white bg-dark mb-3" style="width: 290px; height: 275px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
+<div class="card text-white bg-dark mb-3" style="float:center; border: 5px solid #DCE1DE; border-radius: 25px;">
         <div class="card-body">
             <h4 class="character name">Name: @character.CharacterName</h4>
             <h5 class="character class">Class: @character.Class</h5>
             <h6 class="character level">Level: @character.Level</h6>
-            <div>HP:<input type="number" min="1" max="999" @bind="character.Hp"></div>
+            <h5>HP:<input type="number" min="1" max="999" @bind="character.Hp"></h5>
+            <h6 class="character initiative">Initiative bonus: @character.InitiativeBonus</h6>
             <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
+            <h6 class="character passive insight">Passive insight: @character.PassiveInsight</h6>
+            <h6 class="player name">Player name: @character.PlayerName</h6>
+            <h5>Gold:<input type="number" min="1" max="999999" @bind="character.Gold"></h5>
             <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
             <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
         </div>
     </div>
 
+<table 
+class="table table-striped table-dark"
+style="width:100%; background-color: #1F2421">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Number</th>
+            <th scope="col">Type</th>
+            <th scope="col">Magic</th>
+            <th scope="col">Value</th>
+            <th scope="col">Owner</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in character.Inventory)
+        {
+            <tr>
+                <th scope="row">@item.Name</th>
+                <td>@item.Number</td>
+                <td>@item.Type</td>
+                <td>@item.IsMagic</td>
+                <td>@item.Value</td>
+                <td>@item.Owner</td>
+                <td><button type="button" class="btn btn-danger" @onclick="@(() => ItemRemove(item))">Remove</button></td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
 
 @code {
 
@@ -67,6 +100,11 @@
         Repo.TogglePlaying(characterName);
         var ch = characters.First(c => c.CharacterName == characterName);
         ch.Playing = !ch.Playing;
+    }
+    private void ItemRemove(Item item)
+    {
+        character.Inventory.Remove(item);
+        Repo.RemoveItem(item.Owner, item.Name);
     }
 
 }

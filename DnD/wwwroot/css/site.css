@@ -3,7 +3,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #DCE1DE;
+    background-image: linear-gradient(0deg, #70A288 30%, #DAB785 100%);
 }
 
 a, .btn-link {
@@ -32,29 +32,9 @@ app {
     flex: 1;
 }
 
-    .main .top-row {
-        background-image: linear-gradient(90deg, #49A078 0%, #1F2421 70%);
-        justify-content: flex-end;
-    }
-
-        .main .top-row > a, .main .top-row .btn-link {
-            white-space: nowrap;
-            margin-left: 1.5rem;
-        }
-
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .sidebar {
-    background-image: linear-gradient(180deg, #49A078 0%, #2a3a31 100%);
+    background-image: linear-gradient(180deg, #70A288 30%, #031D44 100%);
 }
-
-    .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
-    }
-
     .sidebar .navbar-brand {
         font-size: 1.1rem;
     }
@@ -195,23 +175,25 @@ input[type=number] {
 }
 
 input{
-    background-color: #343a40;
+    background-color: #031D44;
     color: #fff;
     border: 0px;
     border-radius: 3px;
     padding: 0px 10px;
+    text-align: center;
 }
 textarea{
-    background-color: #343a40;
+    background-color: #031D44;
     color: #fff;
     border: 0px;
     border-radius: 3px;
     padding: 0px 10px;
 }
 select{
-    background-color: #343a40;
+    background-color: #031D44;
     color: #fff;
     border: 0px;
     border-radius: 3px;
     padding: 0px 10px;
+    text-align: center;
 }

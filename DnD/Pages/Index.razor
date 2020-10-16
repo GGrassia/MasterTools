@@ -25,16 +25,22 @@
 
 @foreach (var character in characters)
 {
-    <div class="card text-white bg-dark mb-3" style="width: 290px; height: 275px; float:left; border: 5px solid #DCE1DE; border-radius: 25px;">
-        <div class="card-body">
-            <h4 class="character name">Name: @character.CharacterName</h4>
-            <h5 class="character class">Class: @character.Class</h5>
-            <h6 class="character level">Level: @character.Level</h6>
-            <div>HP:<input type="number" min="1" max="999" @bind="character.Hp"></div>
-            <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
-            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
-            <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
-        </div>
+    <div class="card text-white mb-3"
+        style="width: 290px;
+            height: 275px;
+            background-color: #04395E;
+            float:left;
+            margin: 25px;
+            border-radius: 25px;">
+                <div class="card-body">
+                    <h4 class="character name">Name: @character.CharacterName</h4>
+                    <h5 class="character class">Class: @character.Class</h5>
+                    <h6 class="character level">Level: @character.Level</h6>
+                    <div>HP:<input type="number" min="1" max="999" @bind="character.Hp"></div>
+                    <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
+                    <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+                    <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+                </div>
     </div>
 }
 

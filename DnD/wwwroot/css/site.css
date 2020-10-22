@@ -1,11 +1,13 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-@import url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-image: url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
     min-height: auto;
     min-width: auto;
+}
+.main{
+    background-image: url('Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
+
 }
 
 a, .btn-link {

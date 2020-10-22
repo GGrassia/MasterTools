@@ -175,25 +175,26 @@ input[type=number] {
 }
 
 input{
-    background-color: #031D44;
+    background-color: #04395E;
     color: #fff;
     border: 0px;
-    border-radius: 3px;
-    padding: 0px 10px;
+    border-radius: 25px;
+    padding: 1px 10px;
     text-align: center;
+    max-width: 20%;
 }
 textarea{
-    background-color: #031D44;
+    background-color: #04395E;
     color: #fff;
     border: 0px;
     border-radius: 3px;
-    padding: 0px 10px;
+    padding: 1px 10px;
 }
 select{
-    background-color: #031D44;
+    background-color: #04395E;
     color: #fff;
     border: 0px;
-    border-radius: 3px;
-    padding: 0px 10px;
+    border-radius: 5px;
+    padding: 5px 10px;
     text-align: center;
 }

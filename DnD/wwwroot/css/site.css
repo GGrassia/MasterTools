@@ -1,9 +1,11 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-@import url('Images\fantasy-2243769.jpg');
+@import url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-image: linear-gradient(0deg, #70A288 30%, #DAB785 100%);
+    background-image: url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
+    min-height: auto;
+    min-width: auto;
 }
 
 a, .btn-link {
@@ -33,7 +35,7 @@ app {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, #70A288 30%, #031D44 100%);
+    background-image: linear-gradient(180deg, #c6602c 20%, #1d4470 100%);
 }
     .sidebar .navbar-brand {
         font-size: 1.1rem;

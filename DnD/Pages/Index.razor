@@ -5,47 +5,51 @@
 @using DnD.Entities;
 @using System.ComponentModel.DataAnnotations;
 @inject ICharacterRepository Repo
+<div class="welcome">
+    <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">Welcome to the MasterTool!</h1>
 
-<h1 style="text-align: center; font-family: Z003; font-size: 70px;">Welcome to the MasterTool!</h1>
-
-<h3 style="text-align: center;">This is a tool to help you keep track of passive stats and inventory of your players.</h3>
+    <h3 style="text-align: center;">This is a tool to help you keep track of passive stats and inventory of your
+        players.</h3>
+</div>
 <br />
-<h4>Roll a passive check</h4>CR?<input type="number" min="1" max="30" @bind="cr" style="width: 50px"/>
-<button type="button" class="btn btn-danger" @onclick="@(() => RollPassivePerception(cr))">Passive Perception</button>
-<div>
-    <p>Passed: </p>
-    @foreach (var passing in passed)
-{
-    <p style="font-weight: bold;">@passing.CharacterName </p>
-    
-}
+<div class="passive-checks">
+    <h4>Roll a passive check</h4>CR?<input type="number" min="1" max="30" @bind="cr" style="width: 50px" />
+    <button type="button" class="btn btn-danger" @onclick="@(() => RollPassivePerception(cr))">Passive
+        Perception</button>
+    <div class="character-card">
+        <p>Passed: </p>
+        @foreach (var passing in passed)
+        {
+            <p style="font-weight: bold;">@passing.CharacterName </p>
+        }
+    </div>
 </div>
 
 <h2>Select the characters who are playing this session</h2>
 
 @foreach (var character in characters)
 {
-    <div class="card text-white mb-3"
-        style="width: 290px;
-            height: 275px;
-            background-color: #031D44;
-            float:left;
-            margin: 25px;
-            border-radius: 25px;">
-                <div class="card-body">
-                    <h4>Name: @character.CharacterName</h4>
-                    <h5>Class: @character.Class</h5>
-                    <span>Level: <input contenteditable="true" type="number" min="1" max="20" @bind="character.Level"></span>
-                    <div>HP:<input type="number" min="1" max="999" @bind="character.Hp" style="width: 100px; margin: 5px;"></div>
-                    <div>Passive perception: <input type="number" min="1" max="30" @bind="character.PassivePerception" style="width: 50px; margin: 5px;"></div>
-                    <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
-                    <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
-                </div>
+    <div class="card text-white mb-3" style="width: 290px;
+    height: 275px;
+    background-color: #031D44;
+    float:left;
+    margin: 25px;
+    border-radius: 25px;">
+        <div class="card-body">
+            <h4>Name: @character.CharacterName</h4>
+            <h5>Class: @character.Class</h5>
+            <span>Level: <input contenteditable="true" type="number" min="1" max="20" @bind="character.Level"></span>
+            <div>HP:<input type="number" min="1" max="999" @bind="character.Hp" style="width: 100px; margin: 5px;"></div>
+            <div>Passive perception: <input type="number" min="1" max="30" @bind="character.PassivePerception"
+    style="width: 50px; margin: 5px;"></div>
+            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+            <button type="button" data-toggle="button" class="btn btn-success"
+            @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+        </div>
     </div>
 }
 
 @code {
-
     private List<CharacterEntity> characters = new List<CharacterEntity>();
 
     protected override void OnInitialized()

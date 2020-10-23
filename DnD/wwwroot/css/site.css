@@ -1,11 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-@import url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-image: url('DnD/wwwroot/css/Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
-    min-height: auto;
-    min-width: auto;
 }
 
 a, .btn-link {
@@ -33,6 +29,26 @@ app {
 .main {
     flex: 1;
 }
+
+
+  .background-filter::after {
+    -webkit-backdrop-filter: blur(15px); /* Use for Safari 9+, Edge 17+ (not a mistake) and iOS Safari 9.2+ */
+    backdrop-filter: blur(15px); /* Supported in Chrome 76 */
+  
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%; height: 100%;
+  }
+  
+  .background-filter {
+    position: relative;
+  }
+  
+  .background {
+    background-image: url('../Images/jan-kopriva-a3pKxtQ0OdM-unsplash.jpg');
+    size: auto;
+  }
 
 .sidebar {
     background-image: linear-gradient(180deg, #c6602c 20%, #1d4470 100%);

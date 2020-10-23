@@ -2,11 +2,6 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-<<<<<<< HEAD
-=======
-    min-height: auto;
-    min-width: auto;
->>>>>>> 827c8b415a487f3554e34afa7bcd0c3ab0d7bd18
 }
 .main{
     background-image: url('Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');

@@ -2,10 +2,8 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-.main{
-    background-image: url('Images/michael-dziedzic-zqbTr1jwSxc-unsplash.jpg');
-
+    background-image: url('../Images/bernard-hermant-X-Bu9X6gok0-unsplash.jpg');
+    background-size: cover;
 }
 
 a, .btn-link {
@@ -50,12 +48,12 @@ app {
   }
   
   .background {
-    background-image: url('../Images/jan-kopriva-a3pKxtQ0OdM-unsplash.jpg');
+    background-image: url('../Images/bernard-hermant-X-Bu9X6gok0-unsplash.jpg');
     size: auto;
   }
 
 .sidebar {
-    background-image: linear-gradient(180deg, #c6602c 20%, #1d4470 100%);
+    background-image: linear-gradient(0deg, rgba(183, 181, 204, 0.1) 0%, rgba(28, 108, 185, 0.8) 100%);
 }
     .sidebar .navbar-brand {
         font-size: 1.1rem;
@@ -114,6 +112,13 @@ app {
 
 .invalid {
     outline: 1px solid red;
+}
+
+.titles{
+    background-color: rgba(183, 181, 204, 0.5);
+    background-size: cover;
+    color: #000000;
+    border-radius: 25px;
 }
 
 .validation-message {
@@ -197,7 +202,7 @@ input[type=number] {
 }
 
 input{
-    background-color: #04395E;
+    background-color: #729CCD;
     color: #fff;
     border: 0px;
     border-radius: 25px;
@@ -206,14 +211,14 @@ input{
     max-width: 20%;
 }
 textarea{
-    background-color: #04395E;
+    background-color: #729CCD;
     color: #fff;
     border: 0px;
     border-radius: 3px;
     padding: 1px 10px;
 }
 select{
-    background-color: #04395E;
+    background-color: #729CCD;
     color: #fff;
     border: 0px;
     border-radius: 5px;

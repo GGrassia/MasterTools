@@ -18,11 +18,15 @@
 </InputSelect>
 </EditForm>
 <br>
-<div class="card text-white bg-dark mb-3" style="float:center; border: 5px solid #DCE1DE; border-radius: 25px;">
+<div class="card text-white mb-3" style="margin: 15px; background-color: rgba(28, 108, 185, 1); border-radius: 25px;">
         <div class="card-body">
-            <h4 class="character name">Name: @character.CharacterName</h4>
-            <h5 class="character class">Class: @character.Class</h5>
-            <h6 class="character level">Level: @character.Level</h6>
+            <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="character.CharacterName">
+            <h3>Class: </h3><select @bind="character.Class">
+                    @foreach (var c in Enum.GetNames(typeof(classes)))
+                {
+                    <option value="@c">@c</option>
+                }</select>
+            <span class="character level">Level: @character.Level</span>
             <h5>HP:<input type="number" min="1" max="999" @bind="character.Hp"></h5>
             <h6 class="character initiative">Initiative bonus: @character.InitiativeBonus</h6>
             <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
@@ -65,6 +69,11 @@ style="width:100%; background-color: #1F2421">
 </table>
 
 @code {
+
+private enum classes
+    {
+        Artificer, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
+    }
 
     private List<CharacterEntity> characters = new List<CharacterEntity>();
     private CharacterEntity character;

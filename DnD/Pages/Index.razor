@@ -5,7 +5,8 @@
 @using DnD.Entities;
 @using System.ComponentModel.DataAnnotations;
 @inject ICharacterRepository Repo
-<div class="welcome">
+
+<div class="titles">
     <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">Welcome to the MasterTool!</h1>
 
     <h3 style="text-align: center;">This is a tool to help you keep track of passive stats and inventory of your
@@ -31,7 +32,7 @@
 {
     <div class="card text-white mb-3" style="width: 290px;
     height: 275px;
-    background-color: #031D44;
+    background-color: #1C6CB9;
     float:left;
     margin: 25px;
     border-radius: 25px;">
@@ -48,6 +49,7 @@
         </div>
     </div>
 }
+
 
 @code {
     private List<CharacterEntity> characters = new List<CharacterEntity>();

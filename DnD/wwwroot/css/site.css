@@ -116,7 +116,8 @@ app {
 
 .titles{
     background-color: rgba(183, 181, 204, 0.5);
-    background-size: cover;
+    background-size: auto;
+    backdrop-filter: blur(2px);
     color: #000000;
     border-radius: 25px;
 }

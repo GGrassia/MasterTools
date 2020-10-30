@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/mainpage"
 
 @using LiteDB;
 @using DnD.Models;
@@ -7,10 +7,7 @@
 @inject ICharacterRepository Repo
 
 <div class="titles">
-    <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">Welcome to the MasterTool!</h1>
-
-    <h3 style="text-align: center;">This is a tool to help you keep track of passive stats and inventory of your
-        players.</h3>
+    <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">This is the main page for tracking your characters</h1>
 </div>
 <br />
 <div class="passive-checks">
@@ -56,7 +53,7 @@
 
     protected override void OnInitialized()
     {
-        characters = Repo.GetAll().ToList();
+        characters = Repo.GetActiveCharacters().ToList();
     }
 
     private int cr = 1;

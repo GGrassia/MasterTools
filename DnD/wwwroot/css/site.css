@@ -1,7 +1,22 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('RemixIcon_Fonts_v2.5.0/fonts/remixicon.css');
+
+@font-face{
+    font-family: 'titlefont';
+    src: url(../Fonts/IMFellEnglishSC-Regular.ttf);
+}
+@font-face{
+    font-family: 'bodyfont-regular';
+    src: url(../Fonts/IMFellEnglish-Regular.ttf);
+}
+@font-face{
+    font-family: 'bodyfont-italic';
+    src: url(../Fonts/IMFellEnglish-Italic.ttf);
+}
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: bodyfont-regular;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
     background-image: url('../Images/bernard-hermant-X-Bu9X6gok0-unsplash.jpg');
     background-size: cover;
 }
@@ -31,21 +46,6 @@ app {
 .main {
     flex: 1;
 }
-
-
-  .background-filter::after {
-    -webkit-backdrop-filter: blur(15px); /* Use for Safari 9+, Edge 17+ (not a mistake) and iOS Safari 9.2+ */
-    backdrop-filter: blur(15px); /* Supported in Chrome 76 */
-  
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%; height: 100%;
-  }
-  
-  .background-filter {
-    position: relative;
-  }
   
   .background {
     background-image: url('../Images/bernard-hermant-X-Bu9X6gok0-unsplash.jpg');
@@ -53,7 +53,8 @@ app {
   }
 
 .sidebar {
-    background-image: linear-gradient(0deg, rgba(183, 181, 204, 0.1) 0%, rgba(28, 108, 185, 0.8) 100%);
+    background-image: linear-gradient(0deg, rgba(255, 153, 0, 0.445) 0%, rgba(28, 108, 185, 0.8) 100%);
+    backdrop-filter: blur(2px);
 }
     .sidebar .navbar-brand {
         font-size: 1.1rem;
@@ -67,8 +68,8 @@ app {
     }
 
     .sidebar .nav-item {
-        font-size: 0.9rem;
-        padding-bottom: 0.5rem;
+        font-size: 1.2rem;
+        padding-bottom: 0.8rem;
     }
 
         .sidebar .nav-item:first-of-type {
@@ -82,10 +83,10 @@ app {
         .sidebar .nav-item a {
             color: #000000;
             border-radius: 4px;
-            height: 3rem;
+            height: 5rem;
             display: flex;
             align-items: center;
-            line-height: 3rem;
+            line-height: 5rem;
         }
 
             .sidebar .nav-item a.active {
@@ -115,7 +116,8 @@ app {
 }
 
 .titles{
-    background-color: rgba(183, 181, 204, 0.5);
+    font-family: titlefont;
+    background-color: rgba(255, 153, 0, 0.425);
     background-size: auto;
     backdrop-filter: blur(2px);
     color: #000000;

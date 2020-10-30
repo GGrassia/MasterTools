@@ -7,24 +7,12 @@
 @inject ICharacterRepository Repo
 
 <div class="titles">
-    <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">Welcome to the MasterTool!</h1>
+    <h1 style="text-align: center; font: Z003; font-size: 70px;"><b>Welcome to the MasterTool!</b></h1>
 
     <h3 style="text-align: center;">This is a tool to help you keep track of passive stats and inventory of your
         players.</h3>
 </div>
 <br />
-<div class="passive-checks">
-    <h4>Roll a passive check</h4>CR?<input type="number" min="1" max="30" @bind="cr" style="width: 50px" />
-    <button type="button" class="btn btn-danger" @onclick="@(() => RollPassivePerception(cr))">Passive
-        Perception</button>
-    <div class="character-card">
-        <p>Passed: </p>
-        @foreach (var passing in passed)
-        {
-            <p style="font-weight: bold;">@passing.CharacterName </p>
-        }
-    </div>
-</div>
 
 <h2>Select the characters who are playing this session</h2>
 
@@ -33,6 +21,7 @@
     <div class="card text-white mb-3" style="width: 290px;
     height: 275px;
     background-color: rgba(28, 108, 185, 0.69);
+    backdrop-filter: blur(2px);
     float:left;
     margin: 25px;
     border-radius: 25px;">
@@ -59,9 +48,6 @@
         characters = Repo.GetAll().ToList();
     }
 
-    private int cr = 1;
-    private List<CharacterEntity> passed = new List<CharacterEntity>();
-
     private async Task CharacterRemove(CharacterEntity character)
     {
         if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
@@ -69,7 +55,6 @@
             Repo.Delete(character);
             characters.Remove(character);
         }
-
     }
     private void TogglePlaying(string characterName)
     {
@@ -77,10 +62,4 @@
         var ch = characters.First(c => c.CharacterName == characterName);
         ch.Playing = !ch.Playing;
     }
-
-    private void RollPassivePerception(int cr)
-    {
-        passed = Repo.GetActiveCharacters().Where(p => p.PassivePerception >= cr).ToList();
-    }
-
 }

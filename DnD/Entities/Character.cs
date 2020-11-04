@@ -1,10 +1,9 @@
 ﻿using DnD.Entities;
-using DnD.Models;
 using System.Collections.Generic;
 
 namespace DnD.Entities
 {
-    public class CharacterEntity : Entity
+    public class Character : Entity
     {
         /// <summary>Name of the Character</summary>
         public string CharacterName {get; set;}
@@ -19,7 +18,7 @@ namespace DnD.Entities
         public string PlayerName { get; set; }
 
         /// <summary>What the character is carrying</summary>
-        public List<Item> Inventory { get; set; }
+        public List<CharacterItem> Inventory { get; set; } = new List<CharacterItem>();
 
         /// <summary>The amount of Gold the character is carrying</summary>
         public int Gold { get; set; }

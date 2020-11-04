@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using System;
+﻿using System;
 
 namespace DnD.Entities
 {
@@ -12,7 +11,6 @@ namespace DnD.Entities
 
     public abstract class Entity
     {
-        [BsonId]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

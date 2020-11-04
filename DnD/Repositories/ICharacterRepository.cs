@@ -1,6 +1,7 @@
-﻿using DnD.Entities;
-using DnD.Models;
+﻿using System.Security.AccessControl;
+using DnD.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DnD.Repositories
 {
@@ -12,15 +13,15 @@ namespace DnD.Repositories
 
     public interface ICharacterRepository
     {
-        void AddItem(string owner, Item item);
-        void Create(CharacterEntity entity);
-        void Delete(CharacterEntity entity);
-        IEnumerable<CharacterEntity> GetAll();
-        IEnumerable<Item> GetAllItems();
-        CharacterEntity GetByName(string characterName);
-        void RemoveItem(string owner, string itemName);
-        void Update(CharacterEntity entity);
+        // Character CRUD
+        Task<int> Create(Character entity);
+        IQueryable<Character> GetAll();
+        Task<Character> Get(int id);
+        Task Delete(Character entity);
+        Task Update(Character entity);
+        
+        Character GetByName(string characterName);
         void TogglePlaying(string characterName);
-        IEnumerable<CharacterEntity> GetActiveCharacters();
+        IEnumerable<Character> GetActiveCharacters();
     }
 }

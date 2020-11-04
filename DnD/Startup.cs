@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+
 namespace DnD
 {
     public class Startup
@@ -28,8 +30,12 @@ namespace DnD
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            // Qui stiamo registrando la repository LiteDB come servizio da fornire ai componenti tramite dependency injection.
-            services.AddSingleton(typeof(ICharacterRepository), (o) => new LiteDbCharacterRepository("Party.db"));
+            // Qui stiamo registrando la repository Sqlite come servizio da fornire ai componenti tramite dependency injection.
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ICharacterRepository, CharacterRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

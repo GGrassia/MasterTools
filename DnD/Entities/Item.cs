@@ -1,6 +1,6 @@
-﻿namespace DnD.Models
+﻿namespace DnD.Entities
 {
-    public class Item
+    public class Item : Entity
     {
         /// <summary>If the item is a weapon, piece of armour, a kit or stuff you've found</summary>
         public string Type { get; set; }
@@ -21,6 +21,6 @@
         public string Description { get; set; }
 
         /// <summary>Name of the character currently keeping or owning the item</summary>
-        public string Owner { get; set; }
+        public CharacterItem Owner { get; set; }
     }
 }

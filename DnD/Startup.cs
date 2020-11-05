@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DnD.Repositories;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Blazored.LocalStorage;
 
 namespace DnD
 {
@@ -30,10 +25,15 @@ namespace DnD
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            // Qui stiamo registrando la repository Sqlite come servizio da fornire ai componenti tramite dependency injection.
+            // Aggiungiamo il servizio per accedere al local storage del browser per salvare i token di autenticazione
+            // l'alternativa sarebbe usare i cookies
+            services.AddBlazoredLocalStorage();
+
+            // Qui stiamo registrando il context del database
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Qui stiamo registrando le repository singole da fornire ai componenti tramite dependency injection.
             services.AddScoped<ICharacterRepository, CharacterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
         }
@@ -62,6 +62,14 @@ namespace DnD
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            // Qui stiamo applicando le migration in automatico al DB.
+            // Se sono già state applicate non viene cambiato nulla.
+            // Se il DB non esiste viene creato.
+            // Facendo così non dobbiamo usare Update-Database a mano da riga di comando.
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.Migrate();
         }
     }
 }

@@ -1,118 +1,112 @@
 @page "/CharacterInfo"
 
-@using LiteDB;
 @using DnD.Entities;
-@using System.ComponentModel.DataAnnotations;
-@inject ICharacterRepository Repo
+@inject ICharacterRepository CharacterRepo
+@inject IItemRepository ItemRepo 
 
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
 <EditForm Model="this">
-<InputSelect TValue="string" @bind-Value="@selected">
-       @foreach (CharacterEntity s in characters)
+<InputSelect TValue="Character" @bind-Value="@selectedCharacter">
+        @foreach (Character c in characters)
         {
-            <option value="@s.CharacterName">@s.CharacterName</option>
+            <option value="@c">@c.CharacterName</option>
         }
 
 </InputSelect>
 </EditForm>
-<br>
-<div class="card text-white mb-3" style="margin: 15px; background-color: rgba(28, 108, 185, 0.69); backdrop-filter: blur(2px); border-radius: 25px;">
-        <div class="card-body">
-            <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="character.CharacterName">
-            <h3>Class: </h3><select @bind="character.Class">
+
+@if (selectedCharacter != null)
+{
+    <br>
+    <div class="card text-white mb-3" style="margin: 15px; background-color: rgba(28, 108, 185, 0.69); backdrop-filter: blur(2px); border-radius: 25px;">
+            <div class="card-body">
+                <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="selectedCharacter.CharacterName">
+                <h3>Class: </h3>
+                <select @bind="selectedCharacter.Class">
                     @foreach (var c in Enum.GetNames(typeof(classes)))
-                {
-                    <option value="@c">@c</option>
-                }</select>
-            <span class="character level">Level: @character.Level</span>
-            <h5>HP:<input type="number" min="1" max="999" @bind="character.Hp"></h5>
-            <h6 class="character initiative">Initiative bonus: @character.InitiativeBonus</h6>
-            <h6 class="character passive perception">Passive perception: @character.PassivePerception</h6>
-            <h6 class="character passive insight">Passive insight: @character.PassiveInsight</h6>
-            <h6 class="player name">Player name: @character.PlayerName</h6>
-            <h5>Gold:<input type="number" min="1" max="999999" @bind="character.Gold"></h5>
-            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
-            <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+                    {
+                        <option value="@c">@c</option>
+                    }
+                </select>
+                <span class="character level">Level: @selectedCharacter.Level</span>
+                <h5>HP:<input type="number" min="1" max="999" @bind="selectedCharacter.Hp"></h5>
+                <h6 class="character initiative">Initiative bonus: @selectedCharacter.InitiativeBonus</h6>
+                <h6 class="character passive perception">Passive perception: @selectedCharacter.PassivePerception</h6>
+                <h6 class="character passive insight">Passive insight: @selectedCharacter.PassiveInsight</h6>
+                <h6 class="player name">Player name: @selectedCharacter.PlayerName</h6>
+                <h5>Gold:<input type="number" min="1" max="999999" @bind="selectedCharacter.Gold"></h5>
+                <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove())">KILL HIM</button>
+                <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(async () => await TogglePlaying())">Playing? @selectedCharacter.Playing</button>
+            </div>
         </div>
-    </div>
-<span>Pop a quick item?</span><button>Potion</button>
-<table 
-class="table table-striped table-dark"
-style="width:100%; background-color: #1F2421">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Number</th>
-            <th scope="col">Type</th>
-            <th scope="col">Magic</th>
-            <th scope="col">Value</th>
-            <th scope="col">Owner</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in character.Inventory)
-        {
+    <span>Pop a quick item?</span><button>Potion</button>
+    <table 
+    class="table table-striped table-dark"
+    style="width:100%; background-color: #1F2421">
+        <thead>
             <tr>
-                <th scope="row">@item.Name</th>
-                <td>@item.Number</td>
-                <td>@item.Type</td>
-                <td>@item.IsMagic</td>
-                <td>@item.Value</td>
-                <td>@item.Owner</td>
-                <td><button type="button" class="btn btn-danger" @onclick="@(() => ItemRemove(item))">Remove</button></td>
+                <th scope="col">Name</th>
+                <th scope="col">Number</th>
+                <th scope="col">Type</th>
+                <th scope="col">Magic</th>
+                <th scope="col">Value</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in selectedCharacter.Inventory.Select(i => i.Item))
+            {
+                <tr>
+                    <th scope="row">@item.Name</th>
+                    <td>@item.Number</td>
+                    <td>@item.Type</td>
+                    <td>@item.IsMagic</td>
+                    <td>@item.Value</td>
+                    <td><button type="button" class="btn btn-danger" @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
+                </tr>
+            }
+        </tbody>
     
-</table>
+    </table>
+}
 
 @code {
 
-private enum classes
+    private enum classes
     {
         Artificer, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
     }
 
-    private List<CharacterEntity> characters = new List<CharacterEntity>();
-    private CharacterEntity character;
-    private string selected
-    {
-        get
-        {
-            return character.CharacterName;
-        }
-        set
-        {
-            character = characters.Find(c => c.CharacterName == value);
-        }
-    }
+    private List<Character> characters = new List<Character>();
+    private Character selectedCharacter;
 
     protected override void OnInitialized()
     {
-        characters = Repo.GetAll().ToList();
-        character = characters.First();
+        characters = CharacterRepo.GetAll().ToList();
+        selectedCharacter = characters.FirstOrDefault();
     }
 
-    private async Task CharacterRemove(CharacterEntity character)
+    private async Task CharacterRemove()
     {
-        if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
+        if (await js.Confirm($"Are you sure you want to kill {selectedCharacter.CharacterName}?"))
         {
-            Repo.Delete(character);
-            characters.Remove(character);
+            await CharacterRepo.Delete(selectedCharacter);
+            characters.Remove(selectedCharacter);
+            selectedCharacter = characters.FirstOrDefault();
         }
+    }
 
-    }
-    private void TogglePlaying(string characterName)
+    private async Task TogglePlaying()
     {
-        Repo.TogglePlaying(characterName);
-        var ch = characters.First(c => c.CharacterName == characterName);
-        ch.Playing = !ch.Playing;
+        selectedCharacter.Playing = !selectedCharacter.Playing;
+        await CharacterRepo.Update(selectedCharacter);
     }
-    private void ItemRemove(Item item)
+
+    private async Task ItemRemove(Item item)
     {
-        character.Inventory.Remove(item);
-        Repo.RemoveItem(item.Owner, item.Name);
+        var toRemove = selectedCharacter.Inventory.First(i => i.Item == item);
+        selectedCharacter.Inventory.Remove(toRemove);
+        await ItemRepo.Delete(item);
     }
 
 }

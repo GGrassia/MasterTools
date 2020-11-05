@@ -3,7 +3,7 @@
     public class Item : Entity
     {
         /// <summary>If the item is a weapon, piece of armour, a kit or stuff you've found</summary>
-        public string Type { get; set; }
+        public ItemType Type { get; set; }
 
         /// <summary>How many of this item you have in the inventory, specially useful for potions</summary>
         public int Number { get; set; }
@@ -22,5 +22,15 @@
 
         /// <summary>Name of the character currently keeping or owning the item</summary>
         public CharacterItem Owner { get; set; }
+    }
+
+    public enum ItemType
+    {
+        Weapon,
+        Armor,
+        Tool,
+        Toolkit,
+        Potion,
+        Other
     }
 }

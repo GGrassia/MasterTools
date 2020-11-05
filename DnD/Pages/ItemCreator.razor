@@ -1,9 +1,8 @@
 ﻿@page "/creator/item"
 
-@using LiteDB;
 @using DnD.Entities;
-@using System.ComponentModel.DataAnnotations;
-@inject ICharacterRepository Repo
+@inject IItemRepository ItemRepo
+@inject ICharacterRepository CharacterRepo
 
 <h1>Item creator</h1>
 
@@ -14,9 +13,9 @@
     <ValidationSummary />
 
     <InputSelect @bind-Value="data.Type">
-    @foreach (var c in Enum.GetNames(typeof(itemTypes)))
+    @foreach (var type in Enum.GetNames(typeof(ItemType)))
         {
-            <option value="@c">@c</option>
+            <option value="@type">@type</option>
         }
     </InputSelect>
     <span>Weapon, Armor, Consumable, or other</span>
@@ -48,10 +47,10 @@
     <br />
     <br />
 
-    <InputSelect @bind-Value="data.Owner">
+    <InputSelect @bind-Value="data.OwnerId">
         @foreach (var character in characters)
         {
-            <option value="@character.CharacterName">@character.CharacterName</option>
+            <option value="@character.Id">@character.Id: @character.CharacterName</option>
         }
     </InputSelect>
     <span>Who's keeping the item</span>
@@ -66,7 +65,7 @@
     public class FormData
     {
         /// <summary>If the item is a weapon, piece of armour, a kit or stuff you've found</summary>
-        public string Type { get; set; }
+        public ItemType Type { get; set; }
 
         /// <summary>How many of this item you have in the inventory, specially useful for potions</summary>
         public int Number { get; set; }
@@ -83,27 +82,28 @@
         /// <summary>Description of the item, it's function or properties, if necessary</summary>
         public string Description { get; set; }
 
-        /// <summary>Name of the character currently keeping or owning the item</summary>
-        public string Owner { get; set; } = string.Empty;
+        /// <summary>Id of the character currently keeping or owning the item</summary>
+        public int OwnerId { get; set; } = 0;
     }
 
     protected override void OnInitialized()
     {
-        characters = Repo.GetAll().ToList();
+        characters = CharacterRepo.GetAll().ToList();
     }
 
-    private enum itemTypes
+    private enum ItemTypes
     {
         Weapon, Armor, Tool, Toolkit, Potion, Other
     }
-    private List<CharacterEntity> characters = new List<CharacterEntity>();
+
+    private List<Character> characters = new List<Character>();
 
     private FormData data = new FormData();
 
     //Creates an Item, assigns it to a character and updates the character data in the database
-    public void CreateItem()
+    public async Task CreateItem()
     {
-        Item oggetto = new Item
+        Item item = new Item
         {
             Type = data.Type,
             Number = data.Number,
@@ -111,17 +111,17 @@
             Name = data.Name,
             Value = data.Value,
             Description = data.Description,
-            Owner = data.Owner
+            Owner = new CharacterItem { CharacterId = data.OwnerId }
         };
 
         try
         {
-            Repo.AddItem(oggetto.Owner, oggetto);
-            js.Alert("Item created and added to the character's inventory");
+            await ItemRepo.Create(item);
+            await js.Alert("Item created and added to the character's inventory");
         }
         catch (KeyNotFoundException)
         {
-            js.Alert("Error, character not found");
+            await js.Alert("Error, character not found");
         }
 
     }

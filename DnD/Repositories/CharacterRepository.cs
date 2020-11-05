@@ -2,6 +2,8 @@ using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DnD.Entities;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace DnD.Repositories
 {
@@ -14,8 +16,7 @@ namespace DnD.Repositories
             this.context = context;
         }
 
-        // Character CRUD
-        public Task<int> Create(Character entity)
+        public async Task<int> Create(Character entity)
         {
             context.Add(entity);
             await context.SaveChangesAsync();
@@ -25,32 +26,19 @@ namespace DnD.Repositories
         public IQueryable<Character> GetAll()
             => context.Set<Character>();
 
-        public Task<Character> Get(int id)
+        public async Task<Character> Get(int id)
             => await GetAll().FirstAsync(c => c.Id == id);
 
-        public Task Update(Character entity)
+        public async Task Update(Character entity)
         {
             context.Update(entity);
             await context.SaveChangesAsync();
         }
 
-        public Task Delete(Character entity)
+        public async Task Delete(Character entity)
         {
-            context.Remove();
+            context.Remove(entity);
             await context.SaveChangesAsync();
         }
-
-        Task<Character> GetByName(string characterName)
-            => await GetAll().FirstAsync(c => c.CharacterName == characterName);
-
-        Task TogglePlaying(string characterName)
-        {
-            var character = await GetByName(characterName);
-            character.Playing = !character.Playing;
-            await Update(character);
-        }
-
-        Task<IEnumerable<Character>> GetActiveCharacters()
-            => await GetAll().Where(c => c.Playing).ToListAsync();
     }
 }

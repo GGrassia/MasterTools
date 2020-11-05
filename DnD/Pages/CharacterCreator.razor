@@ -1,7 +1,6 @@
 ﻿@page "/creator/character"
 
-@using DnD.Entities 
-@using System.ComponentModel.DataAnnotations
+@using DnD.Entities
 @inject ICharacterRepository Repo
 
 <h1>Character creator</h1>
@@ -18,7 +17,7 @@
     <br />
 
     <InputSelect @bind-Value="data.Class">
-        @foreach (var c in Enum.GetNames(typeof(classes)))
+        @foreach (var c in Enum.GetNames(typeof(CharacterClass)))
         {
             <option value="@c">@c</option>
         }
@@ -76,7 +75,7 @@
         public string CharacterName { get; set; }
 
         /// <summary>Class of the Character</summary>
-        public string Class { get; set; }
+        public CharacterClass Class { get; set; }
 
         /// <summary>Level of the Character</summary>
         public int Level { get; set; }
@@ -102,15 +101,10 @@
 
     private FormData data = new FormData();
 
-    private enum classes
-    {
-        Artificer, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
-    }
-
     //Creates a Character with stats and no inventory, then saves it to the repository
-    public void CreateCharacter()
+    public async Task CreateCharacter()
     {
-        CharacterEntity personaggio = new CharacterEntity
+        Character character = new Character
         {
             CharacterName = data.CharacterName,
             Class = data.Class,
@@ -121,12 +115,10 @@
             PassivePerception = data.PassivePerception,
             PassiveInsight = data.PassiveInsight,
             Hp = data.Hp,
-            Inventory = new List<Item>(),
             Playing = false
         };
 
-        Repo.Create(personaggio);
-
-        js.Alert("character created and added to database");
+        await Repo.Create(character);
+        await js.Alert("character created and added to database");
     }
 }

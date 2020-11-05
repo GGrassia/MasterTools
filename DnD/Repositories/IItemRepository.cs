@@ -1,12 +1,13 @@
 using DnD.Entities;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DnD.Repositories
 {
+    // Questa è l'interfaccia generica per la repository degli item
     public interface IItemRepository
     {
-        // Character CRUD
+        // Items CRUD
         Task<int> Create(Item entity);
         IQueryable<Item> GetAll();
         Task<Item> Get(int id);

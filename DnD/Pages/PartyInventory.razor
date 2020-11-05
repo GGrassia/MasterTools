@@ -1,9 +1,8 @@
 ﻿@page "/PartyInventory"
 
-@using LiteDB
-@using System.ComponentModel.DataAnnotations
 @using DnD.Entities 
-@inject ICharacterRepository Repo
+@inject IItemRepository ItemRepo
+@inject ICharacterRepository CharacterRepo
 
 <h1>These are the items in the playing characters' inventory</h1>
 <br />
@@ -31,8 +30,8 @@ style="width:100%; background-color: #1F2421">
                 <td>@item.Type</td>
                 <td>@item.IsMagic</td>
                 <td>@item.Value</td>
-                <td>@item.Owner</td>
-                <td><button type="button" class="btn btn-danger" @onclick="@(() => ItemRemove(item))">Remove</button></td>
+                <td>@item.Owner.Character.CharacterName</td>
+                <td><button type="button" class="btn btn-danger" @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
             </tr>
         }
     </tbody>
@@ -43,16 +42,16 @@ style="width:100%; background-color: #1F2421">
 
     protected override void OnInitialized()
     {
-        inventory = Repo.GetActiveCharacters().SelectMany(c =>c.Inventory).ToList();
-        characters = Repo.GetAll().ToList();
+        characters = CharacterRepo.GetAll().Where(c => c.Playing).ToList();
+        inventory = characters.SelectMany(c => c.Inventory).Select(i => i.Item).ToList();
 
     }
-    private List<CharacterEntity> characters = new List<CharacterEntity>();
+    private List<Character> characters = new List<Character>();
     private List<Item> inventory = new List<Item>();
 
-    private void ItemRemove(Item item)
+    private async Task ItemRemove(Item item)
     {
+        await ItemRepo.Delete(item);
         inventory.Remove(item);
-        Repo.RemoveItem(item.Owner, item.Name);
     }
 }

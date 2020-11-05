@@ -1,8 +1,6 @@
 @page "/mainpage"
 
-@using LiteDB;
 @using DnD.Entities;
-@using System.ComponentModel.DataAnnotations;
 @inject ICharacterRepository Repo
 
 <div class="titles">
@@ -40,44 +38,42 @@
             <div>HP:<input type="number" min="1" max="999" @bind="character.Hp" style="width: 100px; margin: 5px;"></div>
             <div>Passive perception: <input type="number" min="1" max="30" @bind="character.PassivePerception"
     style="width: 50px; margin: 5px;"></div>
-            <button type="button" class="btn btn-danger" @onclick="@(() => CharacterRemove(character))">KILL HIM</button>
+            <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove(character))">KILL HIM</button>
             <button type="button" data-toggle="button" class="btn btn-success"
-            @onclick="@(() => TogglePlaying(character.CharacterName))">Playing? @character.Playing</button>
+            @onclick="@(async () => await TogglePlaying(character))">Playing? @character.Playing</button>
         </div>
     </div>
 }
 
 
 @code {
-    private List<CharacterEntity> characters = new List<CharacterEntity>();
+    private List<Character> characters = new List<Character>();
 
     protected override void OnInitialized()
     {
-        characters = Repo.GetActiveCharacters().ToList();
+        characters = Repo.GetAll().Where(c => c.Playing).ToList();
     }
 
     private int cr = 1;
-    private List<CharacterEntity> passed = new List<CharacterEntity>();
+    private List<Character> passed = new List<Character>();
 
-    private async Task CharacterRemove(CharacterEntity character)
+    private async Task CharacterRemove(Character character)
     {
         if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
         {
-            Repo.Delete(character);
+            await Repo.Delete(character);
             characters.Remove(character);
         }
-
     }
-    private void TogglePlaying(string characterName)
+
+    private async Task TogglePlaying(Character character)
     {
-        Repo.TogglePlaying(characterName);
-        var ch = characters.First(c => c.CharacterName == characterName);
-        ch.Playing = !ch.Playing;
+        character.Playing = !character.Playing;
+        await Repo.Update(character);
     }
 
     private void RollPassivePerception(int cr)
     {
-        passed = Repo.GetActiveCharacters().Where(p => p.PassivePerception >= cr).ToList();
+        passed = Repo.GetAll().Where(c => c.Playing && c.PassivePerception >= cr).ToList();
     }
-
 }

@@ -9,10 +9,11 @@ namespace DnD.Extensions
 {
     public static class IJSRuntimeExtensions
     {
-        public static void Alert(this IJSRuntime js, string message)
+        public static async Task Alert(this IJSRuntime js, string message)
         {
-            js.InvokeVoidAsync("alert", new object[] { message });
+            await js.InvokeVoidAsync("alert", new object[] { message });
         }
+
         public static ValueTask<bool> Confirm(this IJSRuntime js, string message)
         {
             return js.InvokeAsync<bool>("confirm", new object[] { message });

@@ -9,7 +9,7 @@ namespace DnD.Entities
         public string CharacterName {get; set;}
 
         /// <summary>Class of the Character</summary>
-        public string Class { get; set; }
+        public CharacterClass Class { get; set; }
 
         /// <summary>Level of the Character</summary>
         public int Level { get; set; }
@@ -37,5 +37,22 @@ namespace DnD.Entities
 
         /// <summary>Toggle if the character is playing or not</summary>
         public bool Playing {get; set;}
+    }
+
+    public enum CharacterClass
+    {
+        Artificer,
+        Barbarian,
+        Bard,
+        Cleric,
+        Druid,
+        Fighter,
+        Monk,
+        Paladin,
+        Ranger,
+        Rogue,
+        Sorcerer,
+        Warlock,
+        Wizard
     }
 }

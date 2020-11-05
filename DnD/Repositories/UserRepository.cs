@@ -1,42 +1,42 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DnD.Entities;
 using System.Linq;
 
 namespace DnD.Repositories
 {
-    public class ItemRepository : IItemRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext context;
 
-        public ItemRepository(ApplicationDbContext context)
+        public UserRepository(ApplicationDbContext context)
         {
             this.context = context;
         }
 
-        public async Task<int> Create(Item entity)
+        public async Task<int> Create(User entity)
         {
             context.Add(entity);
             await context.SaveChangesAsync();
             return entity.Id;
         }
 
-        public IQueryable<Item> GetAll()
-            => context.Set<Item>();
+        public IQueryable<User> GetAll()
+            => context.Set<User>();
 
-        public async Task<Item> Get(int id)
+        public async Task<User> Get(int id)
             => await GetAll().FirstAsync(c => c.Id == id);
 
-        public async Task Update(Item entity)
+        public async Task Update(User entity)
         {
             context.Update(entity);
             await context.SaveChangesAsync();
         }
 
-        public async Task Delete(Item entity)
+        public async Task Delete(User entity)
         {
             context.Remove(entity);
             await context.SaveChangesAsync();
         }
-    }    
+    }
 }

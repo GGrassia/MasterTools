@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnD.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201105013645_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201106152414_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,9 +110,6 @@ namespace DnD.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("HashedPassword")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Salt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")

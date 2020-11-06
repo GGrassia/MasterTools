@@ -110,9 +110,6 @@ namespace DnD.Migrations
                     b.Property<string>("HashedPassword")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Salt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Username")
                         .HasColumnType("TEXT");
 

@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using DnD.Auth;
 
 namespace DnD
 {
@@ -36,6 +38,9 @@ namespace DnD
             // Qui stiamo registrando le repository singole da fornire ai componenti tramite dependency injection.
             services.AddScoped<ICharacterRepository, CharacterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<AuthenticationStateProvider, MyAuthenticationStateProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +61,8 @@ namespace DnD
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

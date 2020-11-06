@@ -3,7 +3,6 @@ using DnD.Entities;
 
 namespace DnD
 {
-    // Ereditiamo da IdentityDbContext che contiene già delle table per l'autenticazione degli utenti
     public class ApplicationDbContext : DbContext
     {
         // Qui dichiariamo i set (cioè le table)

@@ -2,6 +2,7 @@
 
 @using DnD.Entities;
 @inject ICharacterRepository Repo
+@attribute [Authorize(Roles = "standard")]
 
 <div class="titles">
     <h1 style="text-align: center; font: Z003; font-size: 70px;"><b>Welcome to the MasterTool!</b></h1>

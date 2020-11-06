@@ -1,0 +1,61 @@
+﻿@using DnD.Auth
+@inject AuthenticationStateProvider Auth
+@inject NavigationManager Nav
+
+<p>Per favore autenticati</p>
+<EditForm Model="userForLogin">
+    <label>Username</label>
+    <InputText @bind-Value="userForLogin.Username" />
+    <label>Password</label>
+    <InputText @bind-Value="userForLogin.Password" />
+    <button type="submit" class="btn btn-primary" @onclick="ValidateUser">Login</button>
+</EditForm>
+
+<hr />
+
+<p>Oppure registrati</p>
+<EditForm Model="userForRegistration">
+    <label>Username</label>
+    <InputText @bind-Value="userForRegistration.Username" />
+    <label>Password</label>
+    <InputText @bind-Value="userForRegistration.Password" />
+    <button type="submit" class="btn btn-primary" @onclick="RegisterUser">Register</button>
+</EditForm>
+
+@code {
+    class User
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
+    User userForLogin = new User();
+    User userForRegistration = new User();
+
+    private async Task ValidateUser()
+    {
+        try
+        {
+            await ((MyAuthenticationStateProvider)Auth).AuthenticateUser(userForLogin.Username, userForLogin.Password);
+            Nav.NavigateTo("/", true);
+        }
+        catch (Exception ex)
+        {
+            await js.Alert(ex.Message);
+        }
+    }
+
+    private async Task RegisterUser()
+    {
+        try
+        {
+            await ((MyAuthenticationStateProvider)Auth).RegisterUser(userForRegistration.Username, userForRegistration.Password);
+            await js.Alert("Registered!");
+            await ValidateUser();
+        }
+        catch (Exception ex)
+        {
+            await js.Alert(ex.Message);
+        }
+    }
+}

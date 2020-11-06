@@ -2,7 +2,7 @@
 
 namespace DnD.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,8 +53,7 @@ namespace DnD.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(nullable: true),
-                    HashedPassword = table.Column<string>(nullable: true),
-                    Salt = table.Column<string>(nullable: true)
+                    HashedPassword = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

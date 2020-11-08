@@ -7,7 +7,7 @@
     <label>Username</label>
     <InputText @bind-Value="userForLogin.Username" />
     <label>Password</label>
-    <InputText @bind-Value="userForLogin.Password" />
+    <InputText type="password" @bind-Value="userForLogin.Password" />
     <button type="submit" class="btn btn-primary" @onclick="ValidateUser">Login</button>
 </EditForm>
 
@@ -18,7 +18,7 @@
     <label>Username</label>
     <InputText @bind-Value="userForRegistration.Username" />
     <label>Password</label>
-    <InputText @bind-Value="userForRegistration.Password" />
+    <InputText type="password" @bind-Value="userForRegistration.Password" />
     <button type="submit" class="btn btn-primary" @onclick="RegisterUser">Register</button>
 </EditForm>
 

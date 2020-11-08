@@ -59,6 +59,13 @@ namespace DnD.Auth
             }
         }
 
+        public async Task<string> GetCurrentUsername()
+        {
+            var user = await GetAuthenticationStateAsync();
+            var claims = user.User.Claims;
+            return claims.First(c => c.Type == ClaimTypes.Name).Value;
+        }
+
         public async Task AuthenticateUser(string username, string password)
         {
             var user = userRepository.GetAll().FirstOrDefault(u => u.Username == username);
@@ -98,6 +105,11 @@ namespace DnD.Auth
             };
 
             await userRepository.Create(user);
+        }
+
+        public async Task LogoutCurrentUser()
+        {
+            await localStorage.RemoveItemAsync("jwt");
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿@page "/creator/item"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities;
 @inject IItemRepository ItemRepo
 @inject ICharacterRepository CharacterRepo
+@inject AuthenticationStateProvider Auth
 
 <h1>Item creator</h1>
 
@@ -86,9 +88,10 @@
         public int OwnerId { get; set; } = 0;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        characters = CharacterRepo.GetAll().ToList();
+        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == username).ToListAsync();
     }
 
     private enum ItemTypes

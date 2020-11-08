@@ -1,4 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject AuthenticationStateProvider Auth
+@inject NavigationManager Nav
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">MasterTool</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -42,6 +45,9 @@
                 <span class="ri-information-fill" aria-hidden="true" style="margin: 10px;"></span> Character Info
             </NavLink>
         </li>
+        <li class="nav-item px-3">
+            <button class="btn btn-danger" @onclick="Logout">Logout</button>
+        </li>
 
     </ul>
 </div>
@@ -54,5 +60,11 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task Logout()
+    {
+        await ((MyAuthenticationStateProvider)Auth).LogoutCurrentUser();
+        Nav.NavigateTo("/", true);
     }
 }

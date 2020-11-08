@@ -1,8 +1,9 @@
 ﻿@page "/"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities;
-@inject ICharacterRepository Repo
-@attribute [Authorize(Roles = "standard")]
+@inject ICharacterRepository CharacterRepo
+@inject AuthenticationStateProvider Auth
 
 <div class="titles">
     <h1 style="text-align: center; font: Z003; font-size: 70px;"><b>Welcome to the MasterTool!</b></h1>
@@ -41,16 +42,17 @@
 @code {
     private List<Character> characters = new List<Character>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        characters = Repo.GetAll().ToList();
+        var username = await((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == username).ToListAsync();
     }
 
     private async Task CharacterRemove(Character character)
     {
         if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
         {
-            await Repo.Delete(character);
+            await CharacterRepo.Delete(character);
             characters.Remove(character);
         }
     }
@@ -58,6 +60,6 @@
     private async Task TogglePlaying(Character character)
     {
         character.Playing = !character.Playing;
-        await Repo.Update(character);
+        await CharacterRepo.Update(character);
     }
 }

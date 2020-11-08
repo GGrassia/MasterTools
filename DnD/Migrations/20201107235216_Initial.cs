@@ -84,11 +84,46 @@ namespace DnD.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CharactersUsers",
+                columns: table => new
+                {
+                    CharacterId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CharactersUsers", x => new { x.CharacterId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_CharactersUsers_Characters_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "Characters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharactersUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CharactersItems_ItemId",
                 table: "CharactersItems",
                 column: "ItemId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharactersUsers_CharacterId",
+                table: "CharactersUsers",
+                column: "CharacterId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CharactersUsers_UserId",
+                table: "CharactersUsers",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -97,13 +132,16 @@ namespace DnD.Migrations
                 name: "CharactersItems");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "CharactersUsers");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Characters");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Users");
         }
     }
 }

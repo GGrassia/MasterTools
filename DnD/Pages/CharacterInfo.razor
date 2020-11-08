@@ -1,8 +1,10 @@
 @page "/CharacterInfo"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities;
 @inject ICharacterRepository CharacterRepo
 @inject IItemRepository ItemRepo 
+@inject AuthenticationStateProvider Auth
 
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
@@ -80,9 +82,10 @@
     private List<Character> characters = new List<Character>();
     private Character selectedCharacter;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        characters = CharacterRepo.GetAll().ToList();
+        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == username).ToListAsync();
         selectedCharacter = characters.FirstOrDefault();
     }
 

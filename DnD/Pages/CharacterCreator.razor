@@ -1,7 +1,10 @@
 ﻿@page "/creator/character"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities
-@inject ICharacterRepository Repo
+@inject ICharacterRepository CharacterRepo
+@inject IUserRepository UserRepo
+@inject AuthenticationStateProvider Auth
 
 <h1>Character creator</h1>
 
@@ -104,12 +107,16 @@
     //Creates a Character with stats and no inventory, then saves it to the repository
     public async Task CreateCharacter()
     {
+        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        var user = await UserRepo.GetAll().FirstAsync(u => u.Username == username);
+
         Character character = new Character
         {
             CharacterName = data.CharacterName,
             Class = data.Class,
             Level = data.Level,
             PlayerName = data.PlayerName,
+            Owner = new CharacterUser { UserId = user.Id },
             Gold = data.Gold,
             InitiativeBonus = data.InitiativeBonus,
             PassivePerception = data.PassivePerception,
@@ -118,7 +125,7 @@
             Playing = false
         };
 
-        await Repo.Create(character);
+        await CharacterRepo.Create(character);
         await js.Alert("character created and added to database");
     }
 }

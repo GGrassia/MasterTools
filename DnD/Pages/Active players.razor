@@ -1,7 +1,9 @@
 @page "/mainpage"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities;
-@inject ICharacterRepository Repo
+@inject ICharacterRepository CharacterRepo
+@inject AuthenticationStateProvider Auth
 
 <div class="titles">
     <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">This is the main page for tracking your characters</h1>
@@ -49,9 +51,10 @@
 @code {
     private List<Character> characters = new List<Character>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        characters = Repo.GetAll().Where(c => c.Playing).ToList();
+        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == username).ToListAsync();
     }
 
     private int cr = 1;
@@ -61,7 +64,7 @@
     {
         if (await js.Confirm($"Are you sure you want to kill {character.CharacterName}?"))
         {
-            await Repo.Delete(character);
+            await CharacterRepo.Delete(character);
             characters.Remove(character);
         }
     }
@@ -69,11 +72,11 @@
     private async Task TogglePlaying(Character character)
     {
         character.Playing = !character.Playing;
-        await Repo.Update(character);
+        await CharacterRepo.Update(character);
     }
 
     private void RollPassivePerception(int cr)
     {
-        passed = Repo.GetAll().Where(c => c.Playing && c.PassivePerception >= cr).ToList();
+        passed = characters.Where(c => c.Playing && c.PassivePerception >= cr).ToList();
     }
 }

@@ -72,6 +72,24 @@ namespace DnD.Migrations
                     b.ToTable("CharactersItems");
                 });
 
+            modelBuilder.Entity("DnD.Entities.CharacterUser", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CharacterId", "UserId");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CharactersUsers");
+                });
+
             modelBuilder.Entity("DnD.Entities.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -129,6 +147,21 @@ namespace DnD.Migrations
                     b.HasOne("DnD.Entities.Item", "Item")
                         .WithOne("Owner")
                         .HasForeignKey("DnD.Entities.CharacterItem", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DnD.Entities.CharacterUser", b =>
+                {
+                    b.HasOne("DnD.Entities.Character", "Character")
+                        .WithOne("Owner")
+                        .HasForeignKey("DnD.Entities.CharacterUser", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DnD.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

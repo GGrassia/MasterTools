@@ -1,8 +1,10 @@
 ﻿@page "/PartyInventory"
+@attribute [Authorize(Roles = "standard")]
 
 @using DnD.Entities 
 @inject IItemRepository ItemRepo
 @inject ICharacterRepository CharacterRepo
+@inject AuthenticationStateProvider Auth
 
 <h1>These are the items in the playing characters' inventory</h1>
 <br />
@@ -40,9 +42,10 @@ style="width:100%; background-color: #1F2421">
 
 @code {
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        characters = CharacterRepo.GetAll().Where(c => c.Playing).ToList();
+        var username = await((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
+        characters = await CharacterRepo.GetAll().Where(c => c.Playing && c.Owner.User.Username == username).ToListAsync();
         inventory = characters.SelectMany(c => c.Inventory).Select(i => i.Item).ToList();
 
     }

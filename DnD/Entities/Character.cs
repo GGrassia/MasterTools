@@ -5,6 +5,9 @@ namespace DnD.Entities
 {
     public class Character : Entity
     {
+        /// <summary>Owner of the Player</summary>
+        public CharacterUser Owner { get; set; }
+
         /// <summary>Name of the Character</summary>
         public string CharacterName {get; set;}
 

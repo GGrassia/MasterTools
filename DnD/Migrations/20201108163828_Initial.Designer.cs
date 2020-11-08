@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnD.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201107235216_Initial")]
+    [Migration("20201108163828_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

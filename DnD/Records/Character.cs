@@ -18,7 +18,7 @@ namespace DnD.Entities
         public string PlayerName { get; set; }
 
         /// <summary>What the character is carrying</summary>
-        public List<Item> Inventory { get; set; }
+        public List<Item> Inventory { get; } = new List<Item>();
 
         /// <summary>The amount of Gold the character is carrying</summary>
         public int Gold { get; set; }

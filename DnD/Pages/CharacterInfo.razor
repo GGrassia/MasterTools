@@ -85,7 +85,10 @@
     protected override async Task OnInitializedAsync()
     {
         var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
-        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == user.Username).ToListAsync();
+        characters = await CharacterRepo.GetAll()
+            .Include(e => e.Inventory)
+            .ThenInclude(e => e.Item)
+            .Where(c => c.Owner.User.Username == user.Username).ToListAsync();
 
         if (characters.Count > 0)
             selectedCharacterId = characters.FirstOrDefault().Id;

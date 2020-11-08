@@ -27,12 +27,25 @@ style="width:100%; background-color: #1F2421">
         @foreach (var item in inventory)
         {
             <tr>
+                
                 <th scope="row">@item.Name</th>
                 <td>@item.Number</td>
                 <td>@item.Type</td>
                 <td>@item.IsMagic</td>
                 <td>@item.Value</td>
-                <td>@item.Owner.Character.CharacterName</td>
+                <td>
+                    <EditForm Model="item">
+                        <CustomInputSelect TValue="int"
+                                        ValueExpression="@(() => item.Owner.CharacterId)"
+                                        Value="@item.Owner.CharacterId"
+                                        ValueChanged="@(async (int value) => await OnOwnerChanged(item, value))">
+                            @foreach (var character in characters)
+                            {
+                                <option value="@character.Id">@character.CharacterName</option>
+                            }
+                        </CustomInputSelect>
+                    </EditForm>
+                </td>
                 <td><button type="button" class="btn btn-danger" @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
             </tr>
         }
@@ -45,10 +58,13 @@ style="width:100%; background-color: #1F2421">
     protected override async Task OnInitializedAsync()
     {
         var user = await((MyAuthenticationStateProvider)Auth).GetCurrentUser();
-        characters = await CharacterRepo.GetAll().Where(c => c.Playing && c.Owner.User.Username == user.Username).ToListAsync();
+        characters = await CharacterRepo.GetAll()
+            .Include(e => e.Inventory)
+            .ThenInclude(e => e.Item)
+            .Where(c => c.Playing && c.Owner.User.Username == user.Username).ToListAsync();
         inventory = characters.SelectMany(c => c.Inventory).Select(i => i.Item).ToList();
-
     }
+
     private List<Character> characters = new List<Character>();
     private List<Item> inventory = new List<Item>();
 
@@ -56,5 +72,11 @@ style="width:100%; background-color: #1F2421">
     {
         await ItemRepo.Delete(item);
         inventory.Remove(item);
+    }
+
+    private async Task OnOwnerChanged(Item item, int value)
+    {
+        item.Owner = new CharacterItem { CharacterId = value };
+        await ItemRepo.Update(item);
     }
 }

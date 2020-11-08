@@ -47,6 +47,10 @@ namespace DnD.Auth
                 };
 
                 var authenticatedUser = handler.ValidateToken(jwt, validationParameters, out SecurityToken validatedToken);
+                var claims = authenticatedUser.Claims;
+                var username = claims.First(c => c.Type == ClaimTypes.Name).Value;
+                if (await userRepository.GetAll().FirstOrDefaultAsync(u => u.Username == username) == null)
+                    throw new Exception();
                 return new AuthenticationState(authenticatedUser);
             }
             catch
@@ -63,7 +67,7 @@ namespace DnD.Auth
         public async Task<User> GetCurrentUser()
         {
             var username = await GetCurrentUsername();
-            return await userRepository.GetAll().FirstAsync(u => u.Username == username);
+            return await userRepository.GetAll().FirstOrDefaultAsync(u => u.Username == username);
         }
 
         private async Task<string> GetCurrentUsername()

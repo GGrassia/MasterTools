@@ -9,37 +9,36 @@
 <h1>Here you'll find all the details of a single character and his inventory</h1>
 <h2>Select the character you want info about</h2>
 <EditForm Model="this">
-<InputSelect TValue="Character" @bind-Value="@selectedCharacter">
-        @foreach (Character c in characters)
+<CustomInputSelect @bind-Value="@selectedCharacterId">
+        @foreach (var character in characters)
         {
-            <option value="@c">@c.CharacterName</option>
+            <option value="@character.Id">@character.CharacterName</option>
         }
-
-</InputSelect>
+</CustomInputSelect>
 </EditForm>
 
-@if (selectedCharacter != null)
+@if (SelectedCharacter != null)
 {
     <br>
     <div class="card text-white mb-3" style="margin: 15px; background-color: rgba(28, 108, 185, 0.69); backdrop-filter: blur(2px); border-radius: 25px;">
             <div class="card-body">
-                <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="selectedCharacter.CharacterName">
+                <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="SelectedCharacter.CharacterName">
                 <h3>Class: </h3>
-                <select @bind="selectedCharacter.Class">
+                <select @bind="SelectedCharacter.Class">
                     @foreach (var c in Enum.GetNames(typeof(classes)))
                     {
                         <option value="@c">@c</option>
                     }
                 </select>
-                <span class="character level">Level: @selectedCharacter.Level</span>
-                <h5>HP:<input type="number" min="1" max="999" @bind="selectedCharacter.Hp"></h5>
-                <h6 class="character initiative">Initiative bonus: @selectedCharacter.InitiativeBonus</h6>
-                <h6 class="character passive perception">Passive perception: @selectedCharacter.PassivePerception</h6>
-                <h6 class="character passive insight">Passive insight: @selectedCharacter.PassiveInsight</h6>
-                <h6 class="player name">Player name: @selectedCharacter.PlayerName</h6>
-                <h5>Gold:<input type="number" min="1" max="999999" @bind="selectedCharacter.Gold"></h5>
+                <span class="character level">Level: @SelectedCharacter.Level</span>
+                <h5>HP:<input type="number" min="1" max="999" @bind="SelectedCharacter.Hp"></h5>
+                <h6 class="character initiative">Initiative bonus: @SelectedCharacter.InitiativeBonus</h6>
+                <h6 class="character passive perception">Passive perception: @SelectedCharacter.PassivePerception</h6>
+                <h6 class="character passive insight">Passive insight: @SelectedCharacter.PassiveInsight</h6>
+                <h6 class="player name">Player name: @SelectedCharacter.PlayerName</h6>
+                <h5>Gold:<input type="number" min="1" max="999999" @bind="SelectedCharacter.Gold"></h5>
                 <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove())">KILL HIM</button>
-                <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(async () => await TogglePlaying())">Playing? @selectedCharacter.Playing</button>
+                <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(async () => await TogglePlaying())">Playing? @SelectedCharacter.Playing</button>
             </div>
         </div>
     <span>Pop a quick item?</span><button>Potion</button>
@@ -56,7 +55,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in selectedCharacter.Inventory.Select(i => i.Item))
+            @foreach (var item in SelectedCharacter.Inventory.Select(i => i.Item))
             {
                 <tr>
                     <th scope="row">@item.Name</th>
@@ -80,35 +79,40 @@
     }
 
     private List<Character> characters = new List<Character>();
-    private Character selectedCharacter;
+    private int selectedCharacterId;
+    Character SelectedCharacter => characters.FirstOrDefault(c => c.Id == selectedCharacterId);
 
     protected override async Task OnInitializedAsync()
     {
         var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
         characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == user.Username).ToListAsync();
-        selectedCharacter = characters.FirstOrDefault();
+
+        if (characters.Count > 0)
+            selectedCharacterId = characters.FirstOrDefault().Id;
     }
 
     private async Task CharacterRemove()
     {
-        if (await js.Confirm($"Are you sure you want to kill {selectedCharacter.CharacterName}?"))
+        if (await js.Confirm($"Are you sure you want to kill {SelectedCharacter.CharacterName}?"))
         {
-            await CharacterRepo.Delete(selectedCharacter);
-            characters.Remove(selectedCharacter);
-            selectedCharacter = characters.FirstOrDefault();
+            await CharacterRepo.Delete(SelectedCharacter);
+            characters.Remove(SelectedCharacter);
+
+            if (characters.Count > 0)
+                selectedCharacterId = characters.FirstOrDefault().Id;
         }
     }
 
     private async Task TogglePlaying()
     {
-        selectedCharacter.Playing = !selectedCharacter.Playing;
-        await CharacterRepo.Update(selectedCharacter);
+        SelectedCharacter.Playing = !SelectedCharacter.Playing;
+        await CharacterRepo.Update(SelectedCharacter);
     }
 
     private async Task ItemRemove(Item item)
     {
-        var toRemove = selectedCharacter.Inventory.First(i => i.Item == item);
-        selectedCharacter.Inventory.Remove(toRemove);
+        var toRemove = SelectedCharacter.Inventory.First(i => i.Item == item);
+        SelectedCharacter.Inventory.Remove(toRemove);
         await ItemRepo.Delete(item);
     }
 

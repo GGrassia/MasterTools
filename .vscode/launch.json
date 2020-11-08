@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/DnD/bin/Debug/netcoreapp3.1/DnD.dll",
+            "program": "${workspaceFolder}/DnD/bin/Debug/net5.0/DnD.dll",
             "args": [],
             "cwd": "${workspaceFolder}/DnD",
             "stopAtEntry": false,

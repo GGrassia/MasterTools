@@ -2,6 +2,7 @@
 using DnD.Entities;
 using DnD.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,7 +60,13 @@ namespace DnD.Auth
             }
         }
 
-        public async Task<string> GetCurrentUsername()
+        public async Task<User> GetCurrentUser()
+        {
+            var username = await GetCurrentUsername();
+            return await userRepository.GetAll().FirstAsync(u => u.Username == username);
+        }
+
+        private async Task<string> GetCurrentUsername()
         {
             var user = await GetAuthenticationStateAsync();
             var claims = user.User.Claims;

@@ -3,7 +3,6 @@
 
 @using DnD.Entities
 @inject ICharacterRepository CharacterRepo
-@inject IUserRepository UserRepo
 @inject AuthenticationStateProvider Auth
 
 <h1>Character creator</h1>
@@ -107,8 +106,7 @@
     //Creates a Character with stats and no inventory, then saves it to the repository
     public async Task CreateCharacter()
     {
-        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
-        var user = await UserRepo.GetAll().FirstAsync(u => u.Username == username);
+        var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
 
         Character character = new Character
         {

@@ -84,8 +84,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var username = await ((MyAuthenticationStateProvider)Auth).GetCurrentUsername();
-        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == username).ToListAsync();
+        var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
+        characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == user.Username).ToListAsync();
         selectedCharacter = characters.FirstOrDefault();
     }
 

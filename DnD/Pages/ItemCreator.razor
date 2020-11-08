@@ -49,17 +49,17 @@
     <br />
     <br />
 
-    <InputSelect @bind-Value="data.OwnerId">
+    <CustomInputSelect @bind-Value="data.OwnerId">
         @foreach (var character in characters)
         {
-            <option value="@character.Id">@character.Id: @character.CharacterName</option>
+            <option value="@character.Id">@character.CharacterName</option>
         }
-    </InputSelect>
+    </CustomInputSelect>
     <span>Who's keeping the item</span>
     <br />
     <br />
 
-    <button class="btn btn-primary" style="background-color: #49a078; border: 0px; border-color: dce1de" type="submit">Create Item</button>
+    <button class="btn btn-primary" style="background-color: #49a078; border: 0px; border-color: #dce1de" type="submit">Create Item</button>
 </EditForm>
 
 @code {
@@ -85,13 +85,16 @@
         public string Description { get; set; }
 
         /// <summary>Id of the character currently keeping or owning the item</summary>
-        public int OwnerId { get; set; } = 0;
+        public int OwnerId { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
     {
         var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
         characters = await CharacterRepo.GetAll().Where(c => c.Owner.User.Username == user.Username).ToListAsync();
+
+        if (characters.Count > 0)
+            data.OwnerId = characters.First().Id;
     }
 
     private enum ItemTypes

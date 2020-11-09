@@ -2,23 +2,23 @@
 @inject AuthenticationStateProvider Auth
 @inject NavigationManager Nav
 
-<p>Per favore autenticati</p>
+<p>Please log-in</p>
 <EditForm Model="userForLogin">
     <label>Username</label>
-    <InputText @bind-Value="userForLogin.Username" />
+    <InputText minlenght=1 @bind-Value="userForLogin.Username" />
     <label>Password</label>
-    <InputText type="password" @bind-Value="userForLogin.Password" />
+    <InputText minlenght=1 type="password" @bind-Value="userForLogin.Password" />
     <button type="submit" class="btn btn-primary" @onclick="ValidateUser">Login</button>
 </EditForm>
 
 <hr />
 
-<p>Oppure registrati</p>
+<p>Or Sign-in</p>
 <EditForm Model="userForRegistration">
     <label>Username</label>
-    <InputText @bind-Value="userForRegistration.Username" />
+    <InputText minlenght=1 @bind-Value="userForRegistration.Username" />
     <label>Password</label>
-    <InputText type="password" @bind-Value="userForRegistration.Password" />
+    <InputText minlenght=1 type="password" @bind-Value="userForRegistration.Password" />
     <button type="submit" class="btn btn-primary" @onclick="RegisterUser">Register</button>
 </EditForm>
 

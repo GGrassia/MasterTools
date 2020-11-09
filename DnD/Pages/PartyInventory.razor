@@ -1,18 +1,19 @@
 ﻿@page "/PartyInventory"
 @attribute [Authorize(Roles = "standard")]
 
-@using DnD.Entities 
+@using DnD.Entities
 @inject IItemRepository ItemRepo
 @inject ICharacterRepository CharacterRepo
 @inject AuthenticationStateProvider Auth
 
-<h1>These are the items in the playing characters' inventory</h1>
+<div class="titles">
+    <h1 class="h1">These are the items in the playing characters' inventory</h1>
+</div>
+
 <br />
 <br />
 
-<table 
-class="table table-striped table-dark"
-style="width:100%; background-color: #1F2421">
+<table class="table table-striped table-dark" style="width:100%; background-color: #1F2421">
     <thead>
         <tr>
             <th scope="col">Name</th>
@@ -27,7 +28,7 @@ style="width:100%; background-color: #1F2421">
         @foreach (var item in inventory)
         {
             <tr>
-                
+
                 <th scope="row">@item.Name</th>
                 <td>@item.Number</td>
                 <td>@item.Type</td>
@@ -35,33 +36,32 @@ style="width:100%; background-color: #1F2421">
                 <td>@item.Value</td>
                 <td>
                     <EditForm Model="item">
-                        <CustomInputSelect TValue="int"
-                                        ValueExpression="@(() => item.Owner.CharacterId)"
-                                        Value="@item.Owner.CharacterId"
-                                        ValueChanged="@(async (int value) => await OnOwnerChanged(item, value))">
+                        <CustomInputSelect TValue="int" ValueExpression="@(() => item.Owner.CharacterId)"
+                            Value="@item.Owner.CharacterId"
+                            ValueChanged="@(async (int value) => await OnOwnerChanged(item, value))">
                             @foreach (var character in characters)
-                            {
-                                <option value="@character.Id">@character.CharacterName</option>
-                            }
-                        </CustomInputSelect>
-                    </EditForm>
-                </td>
-                <td><button type="button" class="btn btn-danger" @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
-            </tr>
+                                {
+                                    <option value="@character.Id">@character.CharacterName</option>
+                                }
+                            </CustomInputSelect>
+                        </EditForm>
+                    </td>
+                    <td><button type="button" class="btn btn-danger"
+                            @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
+                </tr>
         }
     </tbody>
-    
+
 </table>
 
 @code {
-
     protected override async Task OnInitializedAsync()
     {
-        var user = await((MyAuthenticationStateProvider)Auth).GetCurrentUser();
+        var user = await ((MyAuthenticationStateProvider)Auth).GetCurrentUser();
         characters = await CharacterRepo.GetAll()
             .Include(e => e.Inventory)
-            .ThenInclude(e => e.Item)
-            .Where(c => c.Playing && c.Owner.User.Username == user.Username).ToListAsync();
+        .ThenInclude(e => e.Item)
+        .Where(c => c.Playing && c.Owner.User.Username == user.Username).ToListAsync();
         inventory = characters.SelectMany(c => c.Inventory).Select(i => i.Item).ToList();
     }
 

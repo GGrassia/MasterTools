@@ -6,9 +6,12 @@
 @inject ICharacterRepository CharacterRepo
 @inject AuthenticationStateProvider Auth
 
-<h1>Item creator</h1>
+<div class="titles">
+<h1 class="h1">Item creator</h1>
 
-<p>This component allows you to create new items and assign them to party members.</p>
+<h2 class="h2">This component allows you to create new items and assign them to party members.</h2>
+
+</div>
 
 <EditForm Model="data" OnValidSubmit="CreateItem">
     <DataAnnotationsValidator />

@@ -5,9 +5,10 @@
 @inject ICharacterRepository CharacterRepo
 @inject AuthenticationStateProvider Auth
 
-<h1>Character creator</h1>
-
-<p>This component allows you to create new characters for the party.</p>
+<div class="titles">
+    <h1 class="h1">Character creator</h1>
+    <h3 class="h3">This component allows you to create new characters for the party.</h3>
+</div>
 
 <EditForm Model="data" OnValidSubmit="CreateCharacter">
     <DataAnnotationsValidator />
@@ -20,57 +21,57 @@
 
     <InputSelect @bind-Value="data.Class">
         @foreach (var c in Enum.GetNames(typeof(CharacterClass)))
-        {
-            <option value="@c">@c</option>
-        }
-    </InputSelect>
-    <span>Class</span>
-    <br />
-    <br />
+                {
+                    <option value="@c">@c</option>
+                }
+            </InputSelect>
+            <span>Class</span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.Level" />
-    <span>Level</span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.Level" />
+            <span>Level</span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.Gold" />
-    <span>Gold</span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.Gold" />
+            <span>Gold</span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.InitiativeBonus" />
-    <span>Initiative bonus</span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.InitiativeBonus" />
+            <span>Initiative bonus</span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.PassivePerception" />
-    <span>Passive perception </span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.PassivePerception" />
+            <span>Passive perception </span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.PassiveInsight" />
-    <span>Passive insight</span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.PassiveInsight" />
+            <span>Passive insight</span>
+            <br />
+            <br />
 
-    <InputNumber @bind-Value="data.Hp" />
-    <span>Hp</span>
-    <br />
-    <br />
-    
-    <InputText @bind-Value="data.PlayerName" />
-    <span>Name of the player </span>
-    <br />
-    <br />
+            <InputNumber @bind-Value="data.Hp" />
+            <span>Hp</span>
+            <br />
+            <br />
 
-
-    <button class="btn btn-primary" style="background-color: #49a078; border: 0px; border-color: #dce1de" type="submit">Create Character</button>
-
-</EditForm>
+            <InputText @bind-Value="data.PlayerName" />
+            <span>Name of the player </span>
+            <br />
+            <br />
 
 
-@code {
+            <button class="btn btn-primary" style="background-color: #49a078; border: 0px; border-color: #dce1de"
+                type="submit">Create Character</button>
 
+        </EditForm>
+
+
+        @code {
     public class FormData
     {
         /// <summary>Name of the Character</summary>

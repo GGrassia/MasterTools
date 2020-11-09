@@ -3,48 +3,52 @@
 
 @using DnD.Entities;
 @inject ICharacterRepository CharacterRepo
-@inject IItemRepository ItemRepo 
+@inject IItemRepository ItemRepo
 @inject AuthenticationStateProvider Auth
 
-<h1>Here you'll find all the details of a single character and his inventory</h1>
-<h2>Select the character you want info about</h2>
-<EditForm Model="this">
-<CustomInputSelect @bind-Value="@selectedCharacterId">
-        @foreach (var character in characters)
-        {
-            <option value="@character.Id">@character.CharacterName</option>
-        }
-</CustomInputSelect>
-</EditForm>
+<div class="titles">
+    <h1 class="h1">Here you'll find all the details of a single character and his inventory</h1>
+    <h2 class="h2">Select the character you want info about</h2>
+</div>
 
-@if (SelectedCharacter != null)
+<EditForm Model="this">
+    <CustomInputSelect @bind-Value="@selectedCharacterId">
+        @foreach (var character in characters)
+                {
+                    <option value="@character.Id">@character.CharacterName</option>
+                }
+            </CustomInputSelect>
+        </EditForm>
+
+        @if (SelectedCharacter != null)
 {
     <br>
-    <div class="card text-white mb-3" style="margin: 15px; background-color: rgba(28, 108, 185, 0.69); backdrop-filter: blur(2px); border-radius: 25px;">
-            <div class="card-body">
-                <span style="margin: auto; font-size: auto;">Name: </span><input type="text" @bind="SelectedCharacter.CharacterName">
-                <h3>Class: </h3>
-                <select @bind="SelectedCharacter.Class">
-                    @foreach (var c in Enum.GetNames(typeof(classes)))
-                    {
-                        <option value="@c">@c</option>
-                    }
-                </select>
-                <span class="character level">Level: @SelectedCharacter.Level</span>
-                <h5>HP:<input type="number" min="1" max="999" @bind="SelectedCharacter.Hp"></h5>
-                <h6 class="character initiative">Initiative bonus: @SelectedCharacter.InitiativeBonus</h6>
-                <h6 class="character passive perception">Passive perception: @SelectedCharacter.PassivePerception</h6>
-                <h6 class="character passive insight">Passive insight: @SelectedCharacter.PassiveInsight</h6>
-                <h6 class="player name">Player name: @SelectedCharacter.PlayerName</h6>
-                <h5>Gold:<input type="number" min="1" max="999999" @bind="SelectedCharacter.Gold"></h5>
-                <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove())">KILL HIM</button>
-                <button type="button" data-toggle="button" class="btn btn-success" @onclick="@(async () => await TogglePlaying())">Playing? @SelectedCharacter.Playing</button>
-            </div>
+    <div class="card text-white mb-3"
+        style="margin: 15px; background-color: rgba(28, 108, 185, 0.69); backdrop-filter: blur(2px); border-radius: 25px;">
+        <div class="card-body">
+            <span style="margin: auto; font-size: auto;">Name: </span><input type="text"
+                @bind="SelectedCharacter.CharacterName">
+            <h3>Class: </h3>
+            <select @bind="SelectedCharacter.Class">
+                @foreach (var c in Enum.GetNames(typeof(classes)))
+                {
+                    <option value="@c">@c</option>
+                }
+            </select>
+            <span class="character level">Level: @SelectedCharacter.Level</span>
+            <h5>HP:<input type="number" min="1" max="999" @bind="SelectedCharacter.Hp"></h5>
+            <h6 class="character initiative">Initiative bonus: @SelectedCharacter.InitiativeBonus</h6>
+            <h6 class="character passive perception">Passive perception: @SelectedCharacter.PassivePerception</h6>
+            <h6 class="character passive insight">Passive insight: @SelectedCharacter.PassiveInsight</h6>
+            <h6 class="player name">Player name: @SelectedCharacter.PlayerName</h6>
+            <h5>Gold:<input type="number" min="1" max="999999" @bind="SelectedCharacter.Gold"></h5>
+            <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove())">KILL HIM</button>
+            <button type="button" data-toggle="button" class="btn btn-success"
+                @onclick="@(async () => await TogglePlaying())">Playing? @SelectedCharacter.Playing</button>
         </div>
+    </div>
     <span>Pop a quick item?</span><button>Potion</button>
-    <table 
-    class="table table-striped table-dark"
-    style="width:100%; background-color: #1F2421">
+    <table class="table table-striped table-dark" style="width:100%; background-color: #1F2421">
         <thead>
             <tr>
                 <th scope="col">Name</th>
@@ -63,11 +67,12 @@
                     <td>@item.Type</td>
                     <td>@item.IsMagic</td>
                     <td>@item.Value</td>
-                    <td><button type="button" class="btn btn-danger" @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
+                    <td><button type="button" class="btn btn-danger"
+                            @onclick="@(async () => await ItemRemove(item))">Remove</button></td>
                 </tr>
             }
         </tbody>
-    
+
     </table>
 }
 

@@ -6,7 +6,7 @@
 @inject AuthenticationStateProvider Auth
 
 <div class="titles">
-    <h1 style="text-align: center; font-framily: Z003; font-size: 70px;">This is the main page for tracking your characters</h1>
+    <h1 class="h1">This is the main page for tracking your characters</h1>
 </div>
 <br />
 <div class="passive-checks">
@@ -27,22 +27,23 @@
 @foreach (var character in characters)
 {
     <div class="card text-white mb-3" style="width: 290px;
-    height: 275px;
-    background-color: rgba(28, 108, 185, 0.69);
-    backdrop-filter: blur(2px);
-    float:left;
-    margin: 25px;
-    border-radius: 25px;">
+        height: 275px;
+        background-color: rgba(28, 108, 185, 0.69);
+        backdrop-filter: blur(2px);
+        float:left;
+        margin: 25px;
+        border-radius: 25px;">
         <div class="card-body">
             <h4>Name: @character.CharacterName</h4>
             <h5>Class: @character.Class</h5>
             <span>Level: <input contenteditable="true" type="number" min="1" max="20" @bind="character.Level"></span>
             <div>HP:<input type="number" min="1" max="999" @bind="character.Hp" style="width: 100px; margin: 5px;"></div>
             <div>Passive perception: <input type="number" min="1" max="30" @bind="character.PassivePerception"
-    style="width: 50px; margin: 5px;"></div>
-            <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove(character))">KILL HIM</button>
+                    style="width: 50px; margin: 5px;"></div>
+            <button type="button" class="btn btn-danger" @onclick="@(async () => await CharacterRemove(character))">KILL
+                HIM</button>
             <button type="button" data-toggle="button" class="btn btn-success"
-            @onclick="@(async () => await TogglePlaying(character))">Playing? @character.Playing</button>
+                @onclick="@(async () => await TogglePlaying(character))">Playing? @character.Playing</button>
         </div>
     </div>
 }

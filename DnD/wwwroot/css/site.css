@@ -61,10 +61,10 @@ app {
   flex: 1;
 }
 
-.background {
+/*.background {
   background-image: url("../Images/bernard-hermant-X-Bu9X6gok0-unsplash.jpg");
   size: auto;
-}
+}*/
 
 .sidebar {
   background-image: linear-gradient(

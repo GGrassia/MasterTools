@@ -71,9 +71,9 @@ namespace DnD
             });
 
             // Qui stiamo applicando le migration in automatico al DB.
-            // Se sono già state applicate non viene cambiato nulla.
+            // Se sono giï¿½ state applicate non viene cambiato nulla.
             // Se il DB non esiste viene creato.
-            // Facendo così non dobbiamo usare Update-Database a mano da riga di comando.
+            // Facendo cosï¿½ non dobbiamo usare Update-Database a mano da riga di comando.
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             context.Database.Migrate();

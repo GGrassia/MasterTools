@@ -47,7 +47,7 @@
                 @onclick="@(async () => await TogglePlaying())">Playing? @SelectedCharacter.Playing</button>
         </div>
     </div>
-    <span>Pop a quick item?</span><button>Potion</button>
+    <span>Pop a quick item?</span><button class="btn btn-primary" style="background-color: rgb(28, 108, 185);" @onclick="@(async () => await CreatePotion())">Potion</button>
     <table class="table table-striped table-dark" style="width:100%; background-color: #1F2421">
         <thead>
             <tr>
@@ -122,6 +122,30 @@
         var toRemove = SelectedCharacter.Inventory.First(i => i.Item == item);
         SelectedCharacter.Inventory.Remove(toRemove);
         await ItemRepo.Delete(item);
+    }
+
+     public async Task CreatePotion()
+    {
+        Item item = new Item
+        {
+            Type = ItemType.Potion,
+            Number = 1,
+            IsMagic = false,
+            Name = "Small potion of healing",
+            Value = 50,
+            Description = "",
+            Owner = new CharacterItem { CharacterId = SelectedCharacter.Id }
+        };
+
+        try
+        {
+            await ItemRepo.Create(item);
+        }
+        catch (KeyNotFoundException)
+        {
+            await js.Alert("Error, character not found");
+        }
+
     }
 
 }

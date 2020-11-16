@@ -19,7 +19,7 @@ body {
   font-family: bodyfont-regular;
   /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
   background-image: url("../Images/disegno.svg");
-  background-size: auto;
+  background-size: contain;
 }
 
 a,
